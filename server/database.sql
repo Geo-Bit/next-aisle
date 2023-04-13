@@ -1,6 +1,6 @@
-CREATE DATABASE todoapp;
+CREATE DATABASE ez_list;
 
-CREATE TABLE todo(
-    todo_id SERIAL PRIMARY KEY,
+CREATE TABLE shopping_list(
+    item_id SERIAL PRIMARY KEY,
     description VARCHAR(255)
 );

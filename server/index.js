@@ -9,67 +9,67 @@ app.use(express.json());
 
 //ROUTES//
 
-//create a todo
-app.post("/todos", async(req,res) =>{
+//create an item
+app.post("/items", async(req,res) =>{
     try {
         const { description } = req.body;
-        const newTodo = await pool.query(
-            "INSERT INTO todo (description) VALUES($1) RETURNING * ",
+        const newItem = await pool.query(
+            "INSERT INTO shopping_list (description) VALUES($1) RETURNING * ",
             [description]
         );
 
-        res.json(newTodo.rows[0]);
+        res.json(newItem.rows[0]);
 
     } catch (error) {
         console.error(error.message);
     }
 });
 
-//get all todos
-app.get("/todos", async(req,res) => {
+//get all items
+app.get("/items", async(req,res) => {
     try {
-        const allTodos = await pool.query("SELECT * FROM todo");
-        res.json(allTodos.rows);
+        const allItems = await pool.query("SELECT * FROM shopping_list");
+        res.json(allItems.rows);
     } catch (error) {
         console.error(error.message)
     }
 });
 
-//get a todo
-app.get("/todos/:id", async(req,res) => {
+//get an item
+app.get("/items/:id", async(req,res) => {
     try {
         const {id} = req.params;
-        const todo = await pool.query("SELECT * FROM todo WHERE todo_id = $1",[id]);
+        const item = await pool.query("SELECT * FROM shopping_list WHERE item_id = $1",[id]);
 
-        res.json(todo.rows[0]);
+        res.json(item.rows[0]);
 
     } catch (error) {
         console.error(error.message)
     }
 });
 
-//update a todo
-app.put("/todos/:id", async(req,res) => {
+//update an item
+app.put("/items/:id", async(req,res) => {
     try {
         const {id} = req.params;
         const {description} = req.body;
-        const updateTodo = await pool.query("UPDATE todo SET description = $1 WHERE todo_id = $2",[description, id]);
-        res.json("Todo was updated!");
+        const updateItem = await pool.query("UPDATE shopping_list SET description = $1 WHERE item_id = $2",[description, id]);
+        res.json("Item was updated!");
     } catch (error) {
         console.error(error.message);
     }
 });
 
-//delete a todo
-app.delete("/todos/:id", async(req,res) => {
+//delete a item
+app.delete("/items/:id", async(req,res) => {
     try {
         const {id} = req.params;
-        const deleteTodo = await pool.query("DELETE FROM todo WHERE todo_id = $1", [id]);
-        res.json("Todo was deleted!")
+        const deleteItem = await pool.query("DELETE FROM shopping_list WHERE item_id = $1", [id]);
+        res.json("Item was deleted!");
     } catch (error) {
         console.error(error.message);
     }
-})
+});
 
 app.listen(5000, () =>{
     console.log("server has started on port 5000")
