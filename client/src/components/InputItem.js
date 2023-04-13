@@ -14,7 +14,7 @@ const InputItem = () => {
                 body: JSON.stringify(body)
             });
 
-            console.log(response);
+            window.location = "/"; //once a response has been sent, the page will refresh
 
         } catch (error) {
             console.error(error.message);

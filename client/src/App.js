@@ -4,11 +4,15 @@ import './App.css';
 //components
 
 import InputItem from "./components/InputItem";
+import ListItems from "./components/ListItems";
 
 function App() {
-  return (
+  return(
     <Fragment>
+    <div className="container">
       <InputItem />
+      <ListItems />
+    </div>
     </Fragment>
   );
 }
