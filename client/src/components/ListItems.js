@@ -1,5 +1,6 @@
 import React, {Fragment, useEffect, useState} from "react";
 
+import EditItem from "./EditItem";
 
 const ListItems = () => {
 
@@ -56,7 +57,7 @@ const ListItems = () => {
                     <td>
                         {item.description}
                     </td>
-                    <td>Edit</td>
+                    <td><EditItem item={item} /></td>
                     <td>
                         <button 
                             className="btn btn-danger" 
