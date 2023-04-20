@@ -29,18 +29,10 @@ const ListItems = () => {
       });
 
       await deleteItem(id);
-
-      window.location = "/"; //once a response has been sent, the page will refresh
     } catch (error) {
       console.error(error.message);
     }
   };
-
-  // const body = { description };
-  //     const response = await fetch("http://localhost:5000/items", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(body),
 
   const getItems = async () => {
     try {
