@@ -18,6 +18,30 @@ const ListItems = () => {
     }
   };
 
+  const purchaseItem = async (description, id) => {
+    try {
+      const body = { description: description };
+
+      const purchaseItem = await fetch("http://localhost:5000/purchased", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      await deleteItem(id);
+
+      window.location = "/"; //once a response has been sent, the page will refresh
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  // const body = { description };
+  //     const response = await fetch("http://localhost:5000/items", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(body),
+
   const getItems = async () => {
     try {
       const response = await fetch("http://localhost:5000/items");
@@ -52,7 +76,10 @@ const ListItems = () => {
           {items.map((item) => (
             <tr key={item.item_id}>
               <td>
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  onChange={() => purchaseItem(item.description, item.item_id)}
+                ></input>
               </td>
               <td>{item.description}</td>
               <td>

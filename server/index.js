@@ -79,7 +79,6 @@ app.delete("/items/:id", async (req, res) => {
 });
 
 //add item to purchased
-//item description
 app.post("/purchased", async (req, res) => {
   //get timestamp
   t = new Date(Date.now()).toISOString();
