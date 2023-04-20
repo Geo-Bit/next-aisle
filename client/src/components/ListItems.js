@@ -18,6 +18,7 @@ const ListItems = () => {
     }
   };
 
+  //purchase an item
   const purchaseItem = async (description, id) => {
     try {
       const body = { description: description };
@@ -68,10 +69,12 @@ const ListItems = () => {
           {items.map((item) => (
             <tr key={item.item_id}>
               <td>
-                <input
-                  type="checkbox"
-                  onChange={() => purchaseItem(item.description, item.item_id)}
-                ></input>
+                <button
+                  className="btn btn-success"
+                  onClick={() => purchaseItem(item.description, item.item_id)}
+                >
+                  ✓
+                </button>
               </td>
               <td>{item.description}</td>
               <td>
