@@ -78,6 +78,24 @@ app.delete("/items/:id", async (req, res) => {
   }
 });
 
+//add item to purchased
+//item description
+app.post("/purchased", async (req, res) => {
+  //get timestamp
+  t = new Date(Date.now()).toISOString();
+  try {
+    const { description } = req.body;
+    const newItem = await pool.query(
+      "INSERT INTO purchase_history (description,ts) VALUES($1,$2) RETURNING * ",
+      [description, t]
+    );
+
+    res.json(newItem.rows[0]);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
 app.listen(5000, () => {
   console.log("server has started on port 5000");
 });
