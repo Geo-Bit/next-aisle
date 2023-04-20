@@ -38,9 +38,9 @@ const ListItems = () => {
       <table className="table mt-5 text-center">
         <thead>
           <tr>
-            <th>Description</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th></th>
+            <th>Item</th>
+            <th>Modify</th>
           </tr>
         </thead>
         <tbody>
@@ -51,11 +51,12 @@ const ListItems = () => {
             </tr>*/}
           {items.map((item) => (
             <tr key={item.item_id}>
+              <td>
+                <input type="checkbox" />
+              </td>
               <td>{item.description}</td>
               <td>
                 <EditItem item={item} />
-              </td>
-              <td>
                 <button
                   className="btn btn-danger"
                   onClick={() => deleteItem(item.item_id)}
