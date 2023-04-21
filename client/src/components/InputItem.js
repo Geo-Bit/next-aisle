@@ -1,10 +1,13 @@
+//deprecated, moved to ListItems
+
 import React, { Fragment, useState } from "react";
+import ListItems from "./ListItems";
 
 const InputItem = () => {
   const [description, setDescription] = useState("");
 
   const onSubmitForm = async (e) => {
-    e.preventDefault();
+    ListItems.e.preventDefault();
     try {
       const response = await fetch(
         `https://api.spoonacular.com/food/ingredients/autocomplete?query=${description}&number=1&metaInformation=true`,
@@ -31,7 +34,7 @@ const InputItem = () => {
         body: JSON.stringify(body),
       });
 
-      window.location = "/"; //once a response has been sent, the page will refresh
+      //window.location = "/"; //once a response has been sent, the page will refresh
     } catch (error) {
       console.error(error.message);
     }

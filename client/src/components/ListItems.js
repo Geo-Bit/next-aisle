@@ -4,6 +4,42 @@ import EditItem from "./EditItem";
 
 const ListItems = () => {
   const [items, setItems] = useState([]);
+  const [description, setDescription] = useState("");
+
+  const onSubmitForm = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        `https://api.spoonacular.com/food/ingredients/autocomplete?query=${description}&number=1&metaInformation=true`,
+        {
+          headers: { "x-api-key": process.env.REACT_APP_API_KEY },
+        }
+      );
+
+      var aisle = "";
+      const jsonData = await response.json();
+      if (jsonData.length > 0) {
+        aisle = jsonData[0].aisle;
+        console.log(aisle);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+
+    try {
+      const body = { description: description, aisle: aisle };
+      const response = await fetch("http://localhost:5000/items", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      getItems();
+      //window.location = "/"; //once a response has been sent, the page will refresh
+      setDescription("");
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   //delete item function
   const deleteItem = async (id) => {
@@ -39,14 +75,13 @@ const ListItems = () => {
     try {
       const response = await fetch("http://localhost:5000/items");
       const jsonData = await response.json();
-      console.log(jsonData);
       var sorted_items = sortItems(jsonData);
-      console.log(sorted_items);
       setItems(sorted_items);
     } catch (error) {
       console.error(error.message);
     }
   };
+
   useEffect(() => {
     getItems();
   }, []);
@@ -63,10 +98,18 @@ const ListItems = () => {
     });
     return sorted_items;
   };
-
   return (
     <Fragment>
       {" "}
+      <form className="d-flex mt-5" onSubmit={onSubmitForm}>
+        <input
+          type="text"
+          className="form-control"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <button className="btn btn-success">Add</button>
+      </form>
       <table className="table mt-5 text-center">
         <thead>
           <tr>
@@ -110,5 +153,4 @@ const ListItems = () => {
     </Fragment>
   );
 };
-
 export default ListItems;
