@@ -39,7 +39,10 @@ const ListItems = () => {
     try {
       const response = await fetch("http://localhost:5000/items");
       const jsonData = await response.json();
-      setItems(jsonData);
+      console.log(jsonData);
+      var sorted_items = sortItems(jsonData);
+      console.log(sorted_items);
+      setItems(sorted_items);
     } catch (error) {
       console.error(error.message);
     }
@@ -47,6 +50,19 @@ const ListItems = () => {
   useEffect(() => {
     getItems();
   }, []);
+
+  const sortItems = (grocery_items) => {
+    var sorted_items = grocery_items.sort((a, b) => {
+      if (a.aisle < b.aisle) {
+        return -1;
+      }
+      if (a.aisle > b.aisle) {
+        return 1;
+      }
+      return 0;
+    });
+    return sorted_items;
+  };
 
   return (
     <Fragment>
