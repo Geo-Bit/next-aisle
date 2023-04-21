@@ -39,7 +39,6 @@ const ListItems = () => {
     try {
       const response = await fetch("http://localhost:5000/items");
       const jsonData = await response.json();
-
       setItems(jsonData);
     } catch (error) {
       console.error(error.message);

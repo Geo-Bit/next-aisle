@@ -31,7 +31,7 @@ const InputItem = () => {
         body: JSON.stringify(body),
       });
 
-      //window.location = "/"; //once a response has been sent, the page will refresh
+      window.location = "/"; //once a response has been sent, the page will refresh
     } catch (error) {
       console.error(error.message);
     }
