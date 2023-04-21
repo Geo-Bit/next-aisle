@@ -11,11 +11,15 @@ app.use(express.json());
 
 //create an item
 app.post("/items", async (req, res) => {
+  //get item category from FoodData Central
+  console.log(req.body["description"]);
   try {
-    const { description } = req.body;
+    const description = req.body["description"];
+    const aisle = req.body["aisle"];
+    console.log(description);
     const newItem = await pool.query(
-      "INSERT INTO shopping_list (description) VALUES($1) RETURNING * ",
-      [description]
+      "INSERT INTO shopping_list (description, aisle) VALUES($1,$2) RETURNING * ",
+      [description, aisle]
     );
 
     res.json(newItem.rows[0]);
