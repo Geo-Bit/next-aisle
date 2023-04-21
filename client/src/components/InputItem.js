@@ -6,14 +6,32 @@ const InputItem = () => {
   const onSubmitForm = async (e) => {
     e.preventDefault();
     try {
-      const body = { description };
+      const response = await fetch(
+        `https://api.spoonacular.com/food/ingredients/autocomplete?query=${description}&number=1&metaInformation=true`,
+        {
+          headers: { "x-api-key": process.env.REACT_APP_API_KEY },
+        }
+      );
+
+      var aisle = "";
+      const jsonData = await response.json();
+      if (jsonData.length > 0) {
+        aisle = jsonData[0].aisle;
+        console.log(aisle);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+
+    try {
+      const body = { description: description, aisle: aisle };
       const response = await fetch("http://localhost:5000/items", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
 
-      window.location = "/"; //once a response has been sent, the page will refresh
+      //window.location = "/"; //once a response has been sent, the page will refresh
     } catch (error) {
       console.error(error.message);
     }

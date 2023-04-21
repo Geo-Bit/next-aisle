@@ -57,6 +57,7 @@ const ListItems = () => {
           <tr>
             <th></th>
             <th>Item</th>
+            <th>Aisle</th>
             <th>Modify</th>
           </tr>
         </thead>
@@ -77,6 +78,7 @@ const ListItems = () => {
                 </button>
               </td>
               <td>{item.description}</td>
+              <td>{item.aisle}</td>
               <td>
                 <EditItem item={item} />
                 <button
