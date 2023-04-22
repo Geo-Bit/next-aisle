@@ -111,13 +111,13 @@ const ListItems = () => {
         />
         <button className="btn btn-success">Add</button>
       </form>
-      <table className="table mt-5 text-center">
+      <table className="table-responsive-sm -sm mt-5 text-center">
         <thead>
           <tr>
+            <th class=""></th>
+            <th class="pl-5"></th>
             <th class="px-5"></th>
-            <th class="px-5">Item</th>
-            <th class="px-5">Aisle</th>
-            <th class="px-5">Modify</th>
+            <th class="px-5"></th>
           </tr>
         </thead>
         <tbody>
@@ -136,15 +136,15 @@ const ListItems = () => {
                   ✓
                 </button>
               </td>
-              <td>{item.description}</td>
-              <td>{item.aisle}</td>
-              <td>
+              <td class="">{item.description}</td>
+              <td class="pl-4">{item.aisle}</td>
+              <td class="pl-4">
                 <EditItem item={item} />
                 <button
                   className="btn btn-danger btn-sm"
                   onClick={() => deleteItem(item.item_id)}
                 >
-                  Delete
+                  D
                 </button>
               </td>
             </tr>

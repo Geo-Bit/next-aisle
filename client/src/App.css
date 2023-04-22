@@ -10,6 +10,7 @@
 body {
   background-color: #282c34;
   color: white;
+  font-size: 0.75em;
 }
 
 @media (prefers-reduced-motion: no-preference) {

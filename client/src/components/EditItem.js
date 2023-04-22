@@ -32,7 +32,7 @@ const EditItem = ({ item }) => {
         data-toggle="modal"
         data-target={`#id${item.item_id}`}
       >
-        Edit
+        E
       </button>
 
       <div
