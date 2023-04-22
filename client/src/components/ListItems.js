@@ -28,7 +28,7 @@ const ListItems = () => {
 
     try {
       const body = { description: description, aisle: aisle };
-      const response = await fetch("http://localhost:5000/items", {
+      const response = await fetch("http://10.0.1.63:5000/items", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -44,7 +44,7 @@ const ListItems = () => {
   //delete item function
   const deleteItem = async (id) => {
     try {
-      const deleteItem = await fetch(`http://localhost:5000/items/${id}`, {
+      const deleteItem = await fetch(`http://10.0.1.63:5000/items/${id}`, {
         method: "DELETE",
       });
 
@@ -59,7 +59,7 @@ const ListItems = () => {
     try {
       const body = { description: description };
 
-      const purchaseItem = await fetch("http://localhost:5000/purchased", {
+      const purchaseItem = await fetch("http://10.0.1.63:5000/purchased", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -73,7 +73,7 @@ const ListItems = () => {
 
   const getItems = async () => {
     try {
-      const response = await fetch("http://localhost:5000/items");
+      const response = await fetch("http://10.0.1.63:5000/items");
       const jsonData = await response.json();
       var sorted_items = sortItems(jsonData);
       setItems(sorted_items);

@@ -10,7 +10,7 @@ const EditItem = ({ item }) => {
     try {
       const body = { description };
       const response = await fetch(
-        `http://localhost:5000/items/${item.item_id}`,
+        `http://10.0.1.63:5000/items/${item.item_id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
