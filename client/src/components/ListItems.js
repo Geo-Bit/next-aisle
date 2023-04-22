@@ -109,8 +109,8 @@ const ListItems = () => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <button className="btn btn-success">Add</button>
       </form>
+      <p>^Enter Item & Press Enter</p>
       <table className="table-responsive-sm -sm mt-5 text-center">
         <thead>
           <tr>

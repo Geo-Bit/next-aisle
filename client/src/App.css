@@ -19,6 +19,21 @@ body {
   }
 }
 
+table {
+  margin: auto;
+  width: 50%;
+}
+
+p {
+  text-align: center;
+  padding-top: 10px;
+}
+
+input {
+  max-width: 100% !important;
+  margin: auto;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
