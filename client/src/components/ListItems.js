@@ -101,6 +101,7 @@ const ListItems = () => {
   return (
     <Fragment>
       {" "}
+      <h1 className="text-center mt-5">Grocery List</h1>
       <form className="d-flex mt-5" onSubmit={onSubmitForm}>
         <input
           type="text"
@@ -113,10 +114,10 @@ const ListItems = () => {
       <table className="table mt-5 text-center">
         <thead>
           <tr>
-            <th></th>
-            <th>Item</th>
-            <th>Aisle</th>
-            <th>Modify</th>
+            <th class="px-5"></th>
+            <th class="px-5">Item</th>
+            <th class="px-5">Aisle</th>
+            <th class="px-5">Modify</th>
           </tr>
         </thead>
         <tbody>
@@ -129,7 +130,7 @@ const ListItems = () => {
             <tr key={item.item_id}>
               <td>
                 <button
-                  className="btn btn-success"
+                  className="btn btn-success btn-sm"
                   onClick={() => purchaseItem(item.description, item.item_id)}
                 >
                   ✓
@@ -140,7 +141,7 @@ const ListItems = () => {
               <td>
                 <EditItem item={item} />
                 <button
-                  className="btn btn-danger"
+                  className="btn btn-danger btn-sm"
                   onClick={() => deleteItem(item.item_id)}
                 >
                   Delete

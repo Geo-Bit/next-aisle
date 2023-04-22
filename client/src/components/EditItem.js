@@ -28,7 +28,7 @@ const EditItem = ({ item }) => {
     <Fragment>
       <button
         type="button"
-        class="btn btn-warning"
+        class="btn btn-warning btn-sm"
         data-toggle="modal"
         data-target={`#id${item.item_id}`}
       >
@@ -43,7 +43,6 @@ const EditItem = ({ item }) => {
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Edit Item</h4>
               <button
                 type="button"
                 class="close"
@@ -66,15 +65,15 @@ const EditItem = ({ item }) => {
             <div class="modal-footer">
               <button
                 type="button"
-                class="btn btn-warning"
+                class="btn btn-warning btn-sm"
                 data-dismiss="modal"
                 onClick={(e) => updateDescription(e)}
               >
-                Edit
+                Save
               </button>
               <button
                 type="button"
-                class="btn btn-danger"
+                class="btn btn-danger btn-sm"
                 data-dismiss="modal"
                 onClick={() => setDescription(item.description)}
               >
