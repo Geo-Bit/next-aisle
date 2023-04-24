@@ -20,7 +20,6 @@ const InputItem = () => {
       const jsonData = await response.json();
       if (jsonData.length > 0) {
         aisle = jsonData[0].aisle;
-        console.log(aisle);
       }
     } catch (error) {
       console.error(error.message);

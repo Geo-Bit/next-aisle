@@ -2,22 +2,48 @@ import React, { Fragment, useState } from "react";
 
 const EditItem = ({ item }) => {
   const [description, setDescription] = useState(item.description);
+  const [aisle] = useState(item.aisle);
 
   //edit description function
 
   const updateDescription = async (e) => {
     e.preventDefault();
+    var currentAisle = aisle;
+    // get aisle for new description
     try {
-      const body = { description };
       const response = await fetch(
-        `http://10.0.1.63:5000/items/${item.item_id}`,
+        `https://api.spoonacular.com/food/ingredients/autocomplete?query=${description}&number=1&metaInformation=true`,
+        {
+          headers: { "x-api-key": process.env.REACT_APP_API_KEY },
+        }
+      );
+
+      var newAisle = "";
+      const jsonData = await response.json();
+      if (jsonData.length > 0) {
+        newAisle = jsonData[0].aisle;
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+
+    // if aisle is different
+    if (aisle != newAisle) {
+      // update aisle
+      currentAisle = newAisle;
+    }
+
+    try {
+      const body = { description: description, aisle: currentAisle };
+      console.log(body);
+      const response = await fetch(
+        `http://${process.env.REACT_APP_SERVER_IP}:5000/items/${item.item_id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         }
       );
-
       window.location = "/";
     } catch (error) {
       console.error(error.message);

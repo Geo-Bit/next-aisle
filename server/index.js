@@ -55,11 +55,14 @@ app.get("/items/:id", async (req, res) => {
 app.put("/items/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { description } = req.body;
+    const description = req.body["description"];
+    const aisle = req.body["aisle"];
+    //const aisle = req.body["aisle"];
     const updateItem = await pool.query(
-      "UPDATE shopping_list SET description = $1 WHERE item_id = $2",
-      [description, id]
+      "UPDATE shopping_list SET description= $1, aisle= $2 WHERE item_id= $3",
+      [description, aisle, id]
     );
+    //(description, aisle) VALUES($1,$2)
     res.json("Item was updated!");
   } catch (error) {
     console.error(error.message);

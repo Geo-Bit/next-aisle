@@ -20,7 +20,6 @@ const ListItems = () => {
       const jsonData = await response.json();
       if (jsonData.length > 0) {
         aisle = jsonData[0].aisle;
-        console.log(aisle);
       }
     } catch (error) {
       console.error(error.message);
@@ -28,12 +27,15 @@ const ListItems = () => {
 
     try {
       const body = { description: description, aisle: aisle };
-      const response = await fetch("http://10.0.1.63:5000/items", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      getItems();
+      const response = await fetch(
+        `http://${process.env.REACT_APP_SERVER_IP}:5000/items`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }
+      );
+      getItems(); //refresh the component instead of refreshing the whole page
       //window.location = "/"; //once a response has been sent, the page will refresh
       setDescription("");
     } catch (error) {
@@ -44,9 +46,12 @@ const ListItems = () => {
   //delete item function
   const deleteItem = async (id) => {
     try {
-      const deleteItem = await fetch(`http://10.0.1.63:5000/items/${id}`, {
-        method: "DELETE",
-      });
+      const deleteItem = await fetch(
+        `http://${process.env.REACT_APP_SERVER_IP}:5000/items/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       setItems(items.filter((item) => item.item_id !== id));
     } catch (error) {
@@ -59,11 +64,14 @@ const ListItems = () => {
     try {
       const body = { description: description };
 
-      const purchaseItem = await fetch("http://10.0.1.63:5000/purchased", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+      const purchaseItem = await fetch(
+        `http://${process.env.REACT_APP_SERVER_IP}:5000/purchased`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }
+      );
 
       await deleteItem(id);
     } catch (error) {
@@ -73,7 +81,9 @@ const ListItems = () => {
 
   const getItems = async () => {
     try {
-      const response = await fetch("http://10.0.1.63:5000/items");
+      const response = await fetch(
+        `http://${process.env.REACT_APP_SERVER_IP}:5000/items`
+      );
       const jsonData = await response.json();
       var sorted_items = sortItems(jsonData);
       setItems(sorted_items);
@@ -114,10 +124,10 @@ const ListItems = () => {
       <table className="table-responsive-sm -sm mt-5 text-center">
         <thead>
           <tr>
-            <th class=""></th>
-            <th class="pl-5"></th>
-            <th class="px-5"></th>
-            <th class="px-5"></th>
+            <th className=""></th>
+            <th className="pl-5"></th>
+            <th className="px-5"></th>
+            <th className="px-5"></th>
           </tr>
         </thead>
         <tbody>
@@ -136,9 +146,9 @@ const ListItems = () => {
                   ✓
                 </button>
               </td>
-              <td class="">{item.description}</td>
-              <td class="pl-4">{item.aisle}</td>
-              <td class="pl-4">
+              <td className="">{item.description}</td>
+              <td className="pl-4">{item.aisle}</td>
+              <td className="pl-4">
                 <EditItem item={item} />
                 <button
                   className="btn btn-danger btn-sm"
