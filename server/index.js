@@ -100,6 +100,16 @@ app.post("/purchased", async (req, res) => {
   }
 });
 
+//get purchased items
+app.get("/purchased", async (req, res) => {
+  try {
+    const allItems = await pool.query("SELECT * FROM purchase_history");
+    res.json(allItems.rows);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
 app.listen(5000, () => {
   console.log("server has started on port 5000");
 });
