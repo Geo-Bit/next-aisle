@@ -75,7 +75,7 @@ const ItemRecs = () => {
       <div className="d-flex align-items-center justify-content-center mt-1">
         {items.map((item) => (
           <div key={item.item_id}>
-            <button className="btn btn-success btn-sm">
+            <button className="btn mr-1 btn-success btn-sm">
               {item.description}
             </button>
           </div>
