@@ -5,6 +5,7 @@ import "./App.css";
 
 import InputItem from "./components/InputItem";
 import ListItems from "./components/ListItems";
+import ItemRecs from "./components/ItemRecs";
 
 function App() {
   return (

@@ -24,7 +24,11 @@ table {
   width: 50%;
 }
 
-p {
+.recs button {
+  float: left;
+}
+
+.searchInfo {
   text-align: center;
   padding-top: 10px;
 }

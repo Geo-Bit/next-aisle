@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import EditItem from "./EditItem";
+import ItemRecs from "./ItemRecs";
 
 const ListItems = () => {
   const [items, setItems] = useState([]);
@@ -120,7 +121,8 @@ const ListItems = () => {
           onChange={(e) => setDescription(e.target.value)}
         />
       </form>
-      <p>^Enter Item & Press Enter</p>
+      <ItemRecs />
+      {/* <p class="searchInfo">^Enter Item & Press Enter</p> */}
       <table className="table-responsive-sm -sm mt-5 text-center">
         <thead>
           <tr>
