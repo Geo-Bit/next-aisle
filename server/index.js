@@ -111,7 +111,7 @@ app.get("/purchased", async (req, res) => {
 });
 
 //create a list
-app.post("/list", async (req, res) => {
+app.post("/lists", async (req, res) => {
   try {
     const listName = req.body["listName"];
     const layout = "";
@@ -127,7 +127,7 @@ app.post("/list", async (req, res) => {
 });
 
 //get all lists
-app.get("/purchased", async (req, res) => {
+app.get("/lists", async (req, res) => {
   try {
     const allLists = await pool.query("SELECT * FROM lists");
     res.json(allLists.rows);
