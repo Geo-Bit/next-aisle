@@ -112,7 +112,6 @@ app.get("/purchased", async (req, res) => {
 
 //create a list
 app.post("/list", async (req, res) => {
-  //get item category from FoodData Central
   try {
     const listName = req.body["listName"];
     const layout = "";
@@ -122,6 +121,16 @@ app.post("/list", async (req, res) => {
     );
 
     res.json(newList.rows[0]);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+//get all lists
+app.get("/purchased", async (req, res) => {
+  try {
+    const allLists = await pool.query("SELECT * FROM lists");
+    res.json(allLists.rows);
   } catch (error) {
     console.error(error.message);
   }
