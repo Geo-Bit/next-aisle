@@ -7,7 +7,11 @@ const ListItems = () => {
   const [items, setItems] = useState([]);
   const [description, setDescription] = useState("");
 
-  const onSubmitForm = async (e) => {
+  const sendChild = async (description) => {
+    console.log("Hello: ", description);
+  };
+
+  const onSubmitForm = async (e, description) => {
     e.preventDefault();
     try {
       const response = await fetch(
@@ -121,7 +125,7 @@ const ListItems = () => {
           onChange={(e) => setDescription(e.target.value)}
         />
       </form>
-      <ItemRecs />
+      <ItemRecs getItems={getItems} />
       {/* <p class="searchInfo">^Enter Item & Press Enter</p> */}
       <table className="table-responsive-sm -sm mt-5 text-center">
         <thead>

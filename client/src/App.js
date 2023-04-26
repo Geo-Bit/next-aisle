@@ -6,10 +6,12 @@ import "./App.css";
 import InputItem from "./components/InputItem";
 import ListItems from "./components/ListItems";
 import ItemRecs from "./components/ItemRecs";
+import CreateList from "./components/CreateList";
 
 function App() {
   return (
     <Fragment>
+      <CreateList />
       <div className="container">
         <ListItems />
       </div>

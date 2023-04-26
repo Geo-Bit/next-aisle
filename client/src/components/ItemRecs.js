@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import ListItems from "./ListItems";
 
-const ItemRecs = () => {
+const ItemRecs = ({ getItems }) => {
   const [items, purchaseRecs] = useState([]);
   const [description, setDescription] = useState("");
 
@@ -75,7 +75,10 @@ const ItemRecs = () => {
       <div className="d-flex align-items-center justify-content-center mt-1">
         {items.map((item) => (
           <div key={item.item_id}>
-            <button className="btn mr-1 btn-success btn-sm">
+            <button
+              value={description}
+              className="btn mr-1 btn-success btn-sm "
+            >
               {item.description}
             </button>
           </div>
