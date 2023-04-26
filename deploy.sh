@@ -5,6 +5,9 @@ echo "Terminating current processes"
 pm2 stop node
 pm2 stop npm
 
+#Make sure processes are killed
+sudo fuser -k 3000/tcp
+sudo fuser -k 5000/tcp
 
 #Pull latest source code
 echo "Getting latest version of source code..."
@@ -20,5 +23,6 @@ cd /home/pi/ez-list/server
 pm2 start node -- index
 cd /home/pi/ez-list/client
 pm2 start npm -- start
+
 
 
