@@ -3,8 +3,22 @@ import React, { Fragment, useState } from "react";
 const CreateList = () => {
   const [listName, setListName] = useState("");
 
-  const onSubmitForm = async (e, description) => {
-    CreateList.e.preventDefault();
+  const createList = async (e) => {
+    e.preventDefault();
+    try {
+      const body = { listName: listName };
+      const response = await fetch(
+        `http://${process.env.REACT_APP_SERVER_IP}:5000/lists`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }
+      );
+      window.location = "/"; //once a response has been sent, the page will refresh
+    } catch (error) {
+      console.error(error.message);
+    }
     // try {
     //   const response = await fetch(
     //     `https://api.spoonacular.com/food/ingredients/autocomplete?query=${description}&number=1&metaInformation=true`,
@@ -58,8 +72,8 @@ const CreateList = () => {
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">
-                Modal title
+              <h5 class="modal-title text-dark" id="exampleModalLabel">
+                Create New List
               </h5>
               <button
                 type="button"
@@ -73,9 +87,10 @@ const CreateList = () => {
             <div class="modal-body">
               <input
                 type="text"
+                placeholder="enter list name"
                 className="form-control"
-                //value={description}
-                //onChange={(e) => setListName(e.target.value)}
+                value={listName}
+                onChange={(e) => setListName(e.target.value)}
               ></input>
             </div>
 
@@ -87,7 +102,11 @@ const CreateList = () => {
               >
                 Cancel
               </button>
-              <button type="button" class="btn btn-primary">
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={createList}
+              >
                 Create
               </button>
             </div>

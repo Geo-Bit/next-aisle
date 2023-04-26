@@ -113,6 +113,7 @@ app.get("/purchased", async (req, res) => {
 //create a list
 app.post("/lists", async (req, res) => {
   try {
+    console.log("New List!");
     const listName = req.body["listName"];
     const layout = "";
     const newList = await pool.query(
