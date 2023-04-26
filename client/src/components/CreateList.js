@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 
 const CreateList = () => {
-  const [description, setDescription] = useState("");
+  const [listName, setListName] = useState("");
 
   const onSubmitForm = async (e, description) => {
     CreateList.e.preventDefault();
@@ -38,52 +38,57 @@ const CreateList = () => {
 
   return (
     <Fragment>
-      <button className="btn btn-success pull-left" data-toggle="modal">
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-toggle="modal"
+        data-target="#exampleModal"
+      >
         +
       </button>
+
       <div
-        class="modal"
-        // id={`id${item.item_id}`}
-        // onClick={() => setDescription(item.description)}
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
       >
-        <div class="modal-dialog">
+        <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Modal title
+              </h5>
               <button
                 type="button"
                 class="close"
                 data-dismiss="modal"
-                // onClick={() => setDescription(item.description)}
+                aria-label="Close"
               >
-                &times;
+                <span aria-hidden="true">&times;</span>
               </button>
             </div>
-
             <div class="modal-body">
               <input
                 type="text"
                 className="form-control"
                 //value={description}
-                //onChange={(e) => setDescription(e.target.value)}
+                //onChange={(e) => setListName(e.target.value)}
               ></input>
             </div>
 
             <div class="modal-footer">
               <button
                 type="button"
-                class="btn btn-warning btn-sm"
+                class="btn btn-secondary"
                 data-dismiss="modal"
-                //onClick={(e) => updateDescription(e)}
               >
-                Save
+                Cancel
               </button>
-              <button
-                type="button"
-                class="btn btn-danger btn-sm"
-                data-dismiss="modal"
-                //onClick={() => setDescription(item.description)}
-              >
-                Close
+              <button type="button" class="btn btn-primary">
+                Create
               </button>
             </div>
           </div>

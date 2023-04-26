@@ -110,6 +110,23 @@ app.get("/purchased", async (req, res) => {
   }
 });
 
+//create a list
+app.post("/list", async (req, res) => {
+  //get item category from FoodData Central
+  try {
+    const listName = req.body["listName"];
+    const layout = "";
+    const newList = await pool.query(
+      "INSERT INTO lists (list_name, layout) VALUES($1,$2) RETURNING * ",
+      [listName, layout]
+    );
+
+    res.json(newList.rows[0]);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
 app.listen(5000, () => {
   console.log("server has started on port 5000");
 });
