@@ -19,35 +19,6 @@ const CreateList = () => {
     } catch (error) {
       console.error(error.message);
     }
-    // try {
-    //   const response = await fetch(
-    //     `https://api.spoonacular.com/food/ingredients/autocomplete?query=${description}&number=1&metaInformation=true`,
-    //     {
-    //       headers: { "x-api-key": process.env.REACT_APP_API_KEY },
-    //     }
-    //   );
-
-    //   var aisle = "";
-    //   const jsonData = await response.json();
-    //   if (jsonData.length > 0) {
-    //     aisle = jsonData[0].aisle;
-    //   }
-    // } catch (error) {
-    //   console.error(error.message);
-    // }
-
-    // try {
-    //   const body = { description: description, aisle: aisle };
-    //   const response = await fetch("http://10.0.1.63:5000/items", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(body),
-    //   });
-
-    //   //window.location = "/"; //once a response has been sent, the page will refresh
-    // } catch (error) {
-    //   console.error(error.message);
-    // }
   };
 
   return (

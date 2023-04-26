@@ -6,10 +6,7 @@ import ItemRecs from "./ItemRecs";
 const ListItems = () => {
   const [items, setItems] = useState([]);
   const [description, setDescription] = useState("");
-
-  const sendChild = async (description) => {
-    console.log("Hello: ", description);
-  };
+  const [lists, setLists] = useState([]);
 
   const onSubmitForm = async (e, description) => {
     e.preventDefault();
@@ -43,6 +40,19 @@ const ListItems = () => {
       getItems(); //refresh the component instead of refreshing the whole page
       //window.location = "/"; //once a response has been sent, the page will refresh
       setDescription("");
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  const getLists = async () => {
+    try {
+      const response = await fetch(
+        `http://${process.env.REACT_APP_SERVER_IP}:5000/lists`
+      );
+      const jsonData = await response.json();
+      console.log(jsonData);
+      setLists(jsonData);
     } catch (error) {
       console.error(error.message);
     }
@@ -99,6 +109,7 @@ const ListItems = () => {
 
   useEffect(() => {
     getItems();
+    getLists();
   }, []);
 
   const sortItems = (grocery_items) => {
@@ -126,7 +137,17 @@ const ListItems = () => {
         />
       </form>
       <ItemRecs getItems={getItems} />
-      {/* <p class="searchInfo">^Enter Item & Press Enter</p> */}
+      <ul class="nav nav-tabs">
+        {lists.map((list) => (
+          <ul class="nav nav-tabs" key={list.list_id}>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">
+                {list.list_name}
+              </a>
+            </li>
+          </ul>
+        ))}
+      </ul>
       <table className="table-responsive-sm -sm mt-5 text-center">
         <thead>
           <tr>
