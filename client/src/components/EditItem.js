@@ -8,11 +8,25 @@ const EditItem = ({ item }) => {
 
   const updateDescription = async (e) => {
     e.preventDefault();
+    var strippedDescription = description.replace(/[^a-zA-Z ]+/g, "");
+    var customExclusions = ["sm", "lg"];
     var currentAisle = aisle;
     // get aisle for new description
     try {
+      // remove special characters and numbers from description
+      var strippedDescription = description.replace(/[^a-zA-Z ]+/g, "");
+      // convert string to all lowercase
+      strippedDescription = strippedDescription.toLowerCase();
+      // remove exclusions
+      customExclusions.forEach((excl) => {
+        console.log(excl);
+        var regex = `^${excl} `;
+        regex = new RegExp(regex, "g");
+        strippedDescription = strippedDescription.replace(regex, "");
+      });
+
       const response = await fetch(
-        `https://api.spoonacular.com/food/ingredients/autocomplete?query=${description}&number=1&metaInformation=true`,
+        `https://api.spoonacular.com/food/ingredients/autocomplete?query=${strippedDescription}&number=1&metaInformation=true`,
         {
           headers: { "x-api-key": process.env.REACT_APP_API_KEY },
         }

@@ -11,7 +11,6 @@ import CreateList from "./components/CreateList";
 function App() {
   return (
     <Fragment>
-      <CreateList />
       <div className="container">
         <ListItems />
       </div>

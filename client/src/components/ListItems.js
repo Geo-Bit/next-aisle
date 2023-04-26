@@ -6,13 +6,27 @@ import ItemRecs from "./ItemRecs";
 const ListItems = () => {
   const [items, setItems] = useState([]);
   const [description, setDescription] = useState("");
-  const [lists, setLists] = useState([]);
+  //const [lists, setLists] = useState([]);
 
-  const onSubmitForm = async (e, description) => {
+  const onSubmitForm = async (e) => {
     e.preventDefault();
+    var customExclusions = ["sm", "lg"];
+    // get item description
     try {
+      // remove special characters and numbers from description
+      var strippedDescription = description.replace(/[^a-zA-Z ]+/g, "");
+      // convert string to all lowercase
+      strippedDescription = strippedDescription.toLowerCase();
+      // remove exclusions
+      customExclusions.forEach((excl) => {
+        console.log(excl);
+        var regex = `^${excl} `;
+        regex = new RegExp(regex, "g");
+        strippedDescription = strippedDescription.replace(regex, "");
+      });
+
       const response = await fetch(
-        `https://api.spoonacular.com/food/ingredients/autocomplete?query=${description}&number=1&metaInformation=true`,
+        `https://api.spoonacular.com/food/ingredients/autocomplete?query=${strippedDescription}&number=1&metaInformation=true`,
         {
           headers: { "x-api-key": process.env.REACT_APP_API_KEY },
         }
@@ -45,18 +59,18 @@ const ListItems = () => {
     }
   };
 
-  const getLists = async () => {
-    try {
-      const response = await fetch(
-        `http://${process.env.REACT_APP_SERVER_IP}:5000/lists`
-      );
-      const jsonData = await response.json();
-      console.log(jsonData);
-      setLists(jsonData);
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+  // const getLists = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `http://${process.env.REACT_APP_SERVER_IP}:5000/lists`
+  //     );
+  //     const jsonData = await response.json();
+  //     console.log(jsonData);
+  //     setLists(jsonData);
+  //   } catch (error) {
+  //     console.error(error.message);
+  //   }
+  // };
 
   //delete item function
   const deleteItem = async (id) => {
@@ -101,6 +115,7 @@ const ListItems = () => {
       );
       const jsonData = await response.json();
       var sorted_items = sortItems(jsonData);
+      console.log(sorted_items);
       setItems(sorted_items);
     } catch (error) {
       console.error(error.message);
@@ -109,7 +124,7 @@ const ListItems = () => {
 
   useEffect(() => {
     getItems();
-    getLists();
+    //getLists();
   }, []);
 
   const sortItems = (grocery_items) => {
@@ -137,7 +152,7 @@ const ListItems = () => {
         />
       </form>
       <ItemRecs getItems={getItems} />
-      <ul class="nav nav-tabs">
+      {/* <ul class="nav nav-tabs">
         {lists.map((list) => (
           <ul class="nav nav-tabs" key={list.list_id}>
             <li class="nav-item">
@@ -147,7 +162,7 @@ const ListItems = () => {
             </li>
           </ul>
         ))}
-      </ul>
+      </ul> */}
       <table className="table-responsive-sm -sm mt-5 text-center">
         <thead>
           <tr>
