@@ -1,14 +1,5 @@
 #!/bin/sh
 
-#End current pm2 processes
-echo "Terminating current processes"
-pm2 stop node
-pm2 stop npm
-
-#Make sure processes are killed
-sudo fuser -k 3000/tcp
-sudo fuser -k 5000/tcp
-
 #Pull latest source code
 echo "Getting latest version of source code..."
 if git pull; then
@@ -18,11 +9,53 @@ else
 	exit 1
 fi
 
-#Start pm2 processes again
-cd /home/pi/ez-list/server
-pm2 start node -- index
-cd /home/pi/ez-list/client
-pm2 start npm -- start
+#See if Docker image is already running
+echo "Checking if either containers are running..."
+echo "server_c..."
+if [ "$( docker container inspect -f '{{.State.Running}}' server_c )" = "true" ];
+then
+	#Stop Docker image (if running)
+	echo "server_c is running. Stopping..."
+	if docker stop server_c; then
+		echo "server_c stopped"
+	else
+		echo "server_c failed to stop. Exiting..."
+		exit 1
+	fi
+else
+	echo "server_c is not running."
+fi
 
+echo "client_c..."
+if [ "$( docker container inspect -f '{{.State.Running}}' client_c )" = "true" ];
+then
+	#Stop Docker image (if running)
+	echo "client_c is running. Stopping..."
+	if docker stop client_c; then
+		echo "client_c stopped"
+	else
+		echo "client_c failed to stop. Exiting..."
+		exit 1
+	fi
+else
+	echo "client_c is not running."
+fi
 
+#Build new Docker image
+echo "Building new image..."
 
+if docker build -t labdash/dockerize-vuejs-app ~/labdash-home/; then
+	echo "Successfully built new image"
+else
+	echo "Building new image failed. Exiting..."
+		exit 1
+fi
+ 
+#Run Docker container
+echo "Running new Docker image..."
+if docker-compose up --build; then
+	echo "Successfully ran new Docker image!"
+else
+	echo "Running new Docker image failed. Exiting..."
+		exit 1
+fi
