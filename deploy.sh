@@ -53,7 +53,7 @@ fi
  
 #Run Docker container
 echo "Running new Docker image..."
-if docker-compose up --build; then
+if docker-compose up --build -d; then
 	echo "Successfully ran new Docker image!"
 else
 	echo "Running new Docker image failed. Exiting..."
