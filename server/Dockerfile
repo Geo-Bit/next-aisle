@@ -1,13 +1,7 @@
-FROM node:16-alpine
-
-WORKDIR /server
-
-COPY package.json .
-
-RUN npm install
-
-COPY . .
-
-EXPOSE 5000
-
-CMD ["node", "index.js"]
+FROM node:alpine
+WORKDIR /app
+COPY package.json ./
+COPY package-lock.json ./
+COPY ./ ./
+RUN npm i
+CMD ["npm", "run", "start"]
