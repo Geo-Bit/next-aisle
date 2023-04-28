@@ -6,7 +6,7 @@ import ListItems from "./ListItems";
 const InputItem = () => {
   const [description, setDescription] = useState("");
 
-  const onSubmitForm = async (e) => {
+  const onSubmitForm = async (e, description) => {
     ListItems.e.preventDefault();
     try {
       const response = await fetch(

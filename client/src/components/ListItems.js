@@ -1,8 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 
-import EditItem from "./EditItem";
 import ItemRecs from "./ItemRecs";
-import EditItem_TEST from "./EditItem_TEST";
+import EditItem from "./EditItem";
 
 const ListItems = () => {
   const [items, setItems] = useState([]);
@@ -192,7 +191,7 @@ const ListItems = () => {
               <td className="">{item.description}</td>
               <td className="pl-4">{item.aisle}</td>
               <td>
-                <EditItem_TEST item={item} />
+                <EditItem item={item} />
               </td>
               <td className="">
                 <button
