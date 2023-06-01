@@ -3,7 +3,7 @@ import "./App.css";
 
 //components
 
-import InputItem from "./components/InputItem";
+//import InputItem from "./components/InputItem";
 import ListItems from "./components/ListItems";
 import ItemRecs from "./components/ItemRecs";
 import CreateList from "./components/CreateList";

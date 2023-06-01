@@ -5,6 +5,8 @@ const ItemRecs = ({ getItems }) => {
   const [items, purchaseRecs] = useState([]);
   const [description, setDescription] = useState("");
 
+  function clickHandelr() {}
+
   const getPurchaseHistory = async () => {
     try {
       console.log("going");
