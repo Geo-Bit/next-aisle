@@ -14,6 +14,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build the client Docker image
         # run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
-        run: docker build -f client/Dockerfile -t labdash/dockerize-vuejs-app-client
+        run: docker build -f client/Dockerfile -t labdash/dockerize-vuejs-app-client .
       - name: Build the server Docker image
-        run: docker build -f server/Dockerfile -t labdash/dockerize-vuejs-app-server
+        run: docker build -f server/Dockerfile -t labdash/dockerize-vuejs-app-server .
