@@ -2,18 +2,21 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      # run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
-      run: docker build -t labdash/dockerize-vuejs-app ~/labdash-home/
+      - uses: actions/checkout@v3
+      - name: Build the client Docker image
+        # run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        run: ls
+        # run: docker build -f ../ -t labdash/dockerize-vuejs-app
+      - name: Build the server Docker image
+        # run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        #run: docker build -f ../ -t labdash/dockerize-vuejs-app
+        run: ls
