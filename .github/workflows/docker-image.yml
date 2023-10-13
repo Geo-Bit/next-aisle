@@ -16,5 +16,4 @@ jobs:
         # run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
         run: docker build -f client/Dockerfile -t labdash/dockerize-vuejs-app-client
       - name: Build the server Docker image
-        # run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
         run: docker build -f server/Dockerfile -t labdash/dockerize-vuejs-app-server
