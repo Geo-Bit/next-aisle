@@ -11,7 +11,7 @@ const ItemRecs = ({ getItems }) => {
     try {
       console.log("going");
       const response = await fetch(
-        `http://${process.env.REACT_APP_SERVER_IP}:5000/purchased`
+        `http://${process.env.REACT_APP_SERVER_IP}:3000/purchased`
       );
       const jsonData = await response.json();
       return jsonData;

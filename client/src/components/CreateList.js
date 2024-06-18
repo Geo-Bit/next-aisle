@@ -8,7 +8,7 @@ const CreateList = () => {
     try {
       const body = { listName: listName };
       const response = await fetch(
-        `http://${process.env.REACT_APP_SERVER_IP}:5000/lists`,
+        `http://${process.env.REACT_APP_SERVER_IP}:3000/lists`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

@@ -44,7 +44,7 @@ const ListItems = () => {
     try {
       const body = { description: description, aisle: aisle };
       const response = await fetch(
-        `http://${process.env.REACT_APP_SERVER_IP}:5000/items`,
+        `http://${process.env.REACT_APP_SERVER_IP}:3000/items`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -62,7 +62,7 @@ const ListItems = () => {
   // const getLists = async () => {
   //   try {
   //     const response = await fetch(
-  //       `http://${process.env.REACT_APP_SERVER_IP}:5000/lists`
+  //       `http://${process.env.REACT_APP_SERVER_IP}:3000/lists`
   //     );
   //     const jsonData = await response.json();
   //     console.log(jsonData);
@@ -76,7 +76,7 @@ const ListItems = () => {
   const deleteItem = async (id) => {
     try {
       const deleteItem = await fetch(
-        `http://${process.env.REACT_APP_SERVER_IP}:5000/items/${id}`,
+        `http://${process.env.REACT_APP_SERVER_IP}:3000/items/${id}`,
         {
           method: "DELETE",
         }
@@ -94,7 +94,7 @@ const ListItems = () => {
       const body = { description: description };
 
       const purchaseItem = await fetch(
-        `http://${process.env.REACT_APP_SERVER_IP}:5000/purchased`,
+        `http://${process.env.REACT_APP_SERVER_IP}:3000/purchased`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -111,7 +111,7 @@ const ListItems = () => {
   const getItems = async () => {
     try {
       const response = await fetch(
-        `http://${process.env.REACT_APP_SERVER_IP}:5000/items`
+        `http://${process.env.REACT_APP_SERVER_IP}:3000/items`
       );
       const jsonData = await response.json();
       var sorted_items = sortItems(jsonData);

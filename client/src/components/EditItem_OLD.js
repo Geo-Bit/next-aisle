@@ -51,7 +51,7 @@ const EditItem = ({ item }) => {
       const body = { description: description, aisle: currentAisle };
       console.log(body);
       const response = await fetch(
-        `http://${process.env.REACT_APP_SERVER_IP}:5000/items/${item.item_id}`,
+        `http://${process.env.REACT_APP_SERVER_IP}:3000/items/${item.item_id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

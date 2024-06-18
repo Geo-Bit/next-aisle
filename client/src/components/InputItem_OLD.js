@@ -27,7 +27,7 @@ const InputItem = () => {
 
     try {
       const body = { description: description, aisle: aisle };
-      const response = await fetch("http://10.0.1.63:5000/items", {
+      const response = await fetch("http://127.0.0.1:3000/items", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

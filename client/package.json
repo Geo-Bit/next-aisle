@@ -1,7 +1,6 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "proxy": "http://10.0.1.74:5000/",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",
