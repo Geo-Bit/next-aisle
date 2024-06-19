@@ -30,11 +30,21 @@ app.post("/items", async (req, res) => {
 
 //get all items
 app.get("/items", async (req, res) => {
-  try {
-    const allItems = await pool.query("SELECT * FROM shopping_list");
-    res.json(allItems.rows);
-  } catch (error) {
-    console.error(error.message);
+  if (req.query.storeId) {
+    console.log("Bingo");
+    try {
+      const allItems = await pool.query("SELECT * FROM shopping_list");
+      res.json(allItems.rows);
+    } catch (error) {
+      console.error(error.message);
+    }
+  } else {
+    try {
+      const allItems = await pool.query("SELECT * FROM shopping_list");
+      res.json(allItems.rows);
+    } catch (error) {
+      console.error(error.message);
+    }
   }
 });
 

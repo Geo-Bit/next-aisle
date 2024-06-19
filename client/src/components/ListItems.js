@@ -2,11 +2,12 @@ import React, { Fragment, useEffect, useState } from "react";
 
 import ItemRecs from "./ItemRecs";
 import EditItem from "./EditItem";
+import GroceryStoreList from "./GroceryStoreList";
 
 const ListItems = () => {
   const [items, setItems] = useState([]);
   const [description, setDescription] = useState("");
-  //const [lists, setLists] = useState([]);
+  const [lists, setLists] = useState([]);
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
@@ -65,6 +66,7 @@ const ListItems = () => {
   //       `http://${process.env.REACT_APP_SERVER_IP}:3000/lists`
   //     );
   //     const jsonData = await response.json();
+  //     console.log("Lists:");
   //     console.log(jsonData);
   //     setLists(jsonData);
   //   } catch (error) {
@@ -111,7 +113,7 @@ const ListItems = () => {
   const getItems = async () => {
     try {
       const response = await fetch(
-        `http://${process.env.REACT_APP_SERVER_IP}:3000/items`
+        `http://${process.env.REACT_APP_SERVER_IP}:3000/items?storeId=${GroceryStoreList.selectedStore}`
       );
       const jsonData = await response.json();
       var sorted_items = sortItems(jsonData);
@@ -178,6 +180,10 @@ const ListItems = () => {
                 <td>Doe</td>
                 <td>john@example.com</td>
             </tr>*/}
+          <div>
+            <h1>Stores</h1>
+            <GroceryStoreList />
+          </div>
           {items.map((item) => (
             <tr key={item.item_id}>
               <td>
@@ -208,4 +214,5 @@ const ListItems = () => {
     </Fragment>
   );
 };
+
 export default ListItems;

@@ -11,3 +11,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.grocery-store-list {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px; /* Optional: adds space between items */
+}
+
+.grocery-store-item {
+  cursor: pointer;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s;
+}
+
+.grocery-store-item:hover {
+  background-color: #e0e0e0; /* Optional: changes color on hover */
+}
+
+.grocery-store-item.selected {
+  background-color: #b0c4de; /* Changes color for the selected item */
+  border-color: #a0b4c4;
+}
