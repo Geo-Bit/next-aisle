@@ -44,6 +44,7 @@ const ListItems = () => {
 
     try {
       const body = { description: description, aisle: aisle };
+      console.log(GroceryStoreList.selectedStore);
       const response = await fetch(
         `http://${process.env.REACT_APP_SERVER_IP}:3000/items`,
         {
@@ -126,6 +127,7 @@ const ListItems = () => {
 
   useEffect(() => {
     getItems();
+    console.log(GroceryStoreList.selectedStore);
     //getLists();
   }, []);
 

@@ -1,10 +1,10 @@
-CREATE DATABASE ez_list;
+CREATE DATABASE next_aisle;
 
 CREATE TABLE shopping_list(
     item_id SERIAL PRIMARY KEY,
     description VARCHAR(255),
     aisle VARCHAR(255),
-    list VARCHAR(255),
+    list VARCHAR(255)
 );
 
 CREATE TABLE purchase_history(

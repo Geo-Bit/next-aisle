@@ -17,9 +17,10 @@ app.post("/items", async (req, res) => {
   try {
     const description = req.body["description"];
     const aisle = req.body["aisle"];
+    const storeId = req.body["storeId"];
     const newItem = await pool.query(
-      "INSERT INTO shopping_list (description, aisle) VALUES($1,$2) RETURNING * ",
-      [description, aisle]
+      "INSERT INTO shopping_list (description, aisle, list) VALUES($1,$2,$3) RETURNING * ",
+      [description, aisle, storeId]
     );
 
     res.json(newItem.rows[0]);
@@ -33,7 +34,10 @@ app.get("/items", async (req, res) => {
   if (req.query.storeId) {
     console.log("Bingo");
     try {
-      const allItems = await pool.query("SELECT * FROM shopping_list");
+      const allItems = await pool.query(
+        "SELECT * FROM shopping_list WHERE list = ($1)",
+        [req.query.storeId]
+      );
       res.json(allItems.rows);
     } catch (error) {
       console.error(error.message);

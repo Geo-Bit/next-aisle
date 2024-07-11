@@ -1,14 +1,37 @@
-version: "3.3"
+version: "3.8"
+
 services:
-  server:
-    build: ./server
-    container_name: next-aisle-server
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: grocery
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/grocery
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
     ports:
       - "3000:3000"
-  client:
-    build: ./client
-    container_name: next-aisle-client
-    ports:
-      - "8080:8080"
-    stdin_open: true
-    tty: true
+    depends_on:
+      - backend
+    command: ["npm", "run", "dev"]
+    environment:
+      - VITE_HOST=0.0.0.0
+      - VITE_PORT=3000
+
+volumes:
+  db_data:

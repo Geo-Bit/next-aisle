@@ -30,6 +30,7 @@ const GroceryStoreList = () => {
   const handleStoreClick = (store) => {
     setSelectedStore(store.list_id);
     console.log(store.list_name);
+    console.log(store.list_id);
   };
 
   return (

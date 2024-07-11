@@ -1,0 +1,14 @@
+version: "3.3"
+services:
+  server:
+    build: ./server
+    container_name: next-aisle-server
+    ports:
+      - "3000:3000"
+  client:
+    build: ./client
+    container_name: next-aisle-client
+    ports:
+      - "8080:8080"
+    stdin_open: true
+    tty: true
