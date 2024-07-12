@@ -11,11 +11,8 @@ router.post("/api/items", async (req, res) => {
   const { name } = req.body;
 
   try {
-    // remove special characters and numbers from description
     let strippedDescription = name.replace(/[^a-zA-Z ]+/g, "");
-    // convert string to all lowercase
     strippedDescription = strippedDescription.toLowerCase();
-    // remove exclusions
     customExclusions.forEach((excl) => {
       const regex = new RegExp(`^${excl} `, "g");
       strippedDescription = strippedDescription.replace(regex, "");
@@ -93,6 +90,47 @@ router.get("/api/purchased-items", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch purchased items" });
+  }
+});
+
+router.put("/api/items/:id", async (req, res) => {
+  const { name } = req.body;
+
+  try {
+    let strippedDescription = name.replace(/[^a-zA-Z ]+/g, "");
+    strippedDescription = strippedDescription.toLowerCase();
+    customExclusions.forEach((excl) => {
+      const regex = new RegExp(`^${excl} `, "g");
+      strippedDescription = strippedDescription.replace(regex, "");
+    });
+
+    const response = await axios.get(
+      `https://api.spoonacular.com/food/ingredients/autocomplete`,
+      {
+        params: {
+          query: strippedDescription,
+          number: 1,
+          metaInformation: true,
+        },
+        headers: { "x-api-key": process.env.SPOONACULAR_API_KEY },
+      }
+    );
+
+    let aisle = "";
+    if (response.data.length > 0) {
+      aisle = response.data[0].aisle;
+    }
+
+    await ShoppingListItem.update(
+      { name, category: aisle },
+      { where: { id: req.params.id } }
+    );
+
+    const updatedItem = await ShoppingListItem.findByPk(req.params.id);
+    res.json(updatedItem);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to update item" });
   }
 });
 

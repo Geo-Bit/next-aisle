@@ -7,8 +7,10 @@ function App() {
   const [item, setItem] = useState("");
   const [items, setItems] = useState([]);
   const [purchasedItems, setPurchasedItems] = useState([]);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true); // Default to dark mode
   const [showPurchased, setShowPurchased] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
+  const [editedItemName, setEditedItemName] = useState("");
 
   useEffect(() => {
     fetchItems();
@@ -77,6 +79,34 @@ function App() {
     }
   };
 
+  const handleEditItem = (item) => {
+    setEditingItem(item);
+    setEditedItemName(item.name);
+  };
+
+  const handleUpdateItem = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/api/items/${editingItem.id}`,
+        {
+          name: editedItemName,
+        }
+      );
+      console.log("Item updated:", response.data);
+      setEditingItem(null);
+      setEditedItemName("");
+      fetchItems(); // Refresh the item list
+    } catch (error) {
+      console.error("Error updating item:", error);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingItem(null);
+    setEditedItemName("");
+  };
+
   return (
     <div className="app">
       <DarkModeToggle darkMode={darkMode} onToggle={handleToggleDarkMode} />
@@ -125,6 +155,21 @@ function App() {
           }}
         />
       </form>
+      {editingItem && (
+        <form onSubmit={handleUpdateItem} className="input-form">
+          <input
+            type="text"
+            placeholder="Edit grocery item"
+            value={editedItemName}
+            onChange={(e) => setEditedItemName(e.target.value)}
+            className="input-field"
+          />
+          <button type="submit">Update</button>
+          <button type="button" onClick={handleCancelEdit}>
+            Cancel
+          </button>
+        </form>
+      )}
       <table className="item-table">
         <thead>
           <tr>
@@ -141,6 +186,7 @@ function App() {
               <td>
                 <button onClick={() => handleCheckItem(item.id)}>✔️</button>
                 <button onClick={() => handleDeleteItem(item.id)}>❌</button>
+                <button onClick={() => handleEditItem(item)}>✏️</button>
               </td>
             </tr>
           ))}

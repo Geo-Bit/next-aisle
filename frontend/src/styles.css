@@ -109,12 +109,16 @@
     margin-top: 20px;
     border-collapse: collapse;
     width: 100%;
+    table-layout: fixed;  /* Ensure all text fits on a single line */
   }
   
   .item-table th, .item-table td, .purchased-item-table th, .purchased-item-table td {
     padding: 12px;
     border: 1px solid var(--primary-color);
     text-align: left;
+    white-space: nowrap;  /* Ensure all text fits on a single line */
+    overflow: hidden;     /* Prevent text overflow */
+    text-overflow: ellipsis; /* Add ellipsis if text overflows */
   }
   
   .item-table th, .purchased-item-table th {
