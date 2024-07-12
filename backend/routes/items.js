@@ -1,6 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const ShoppingListItem = require("../models/ShoppingListItem");
+const PurchasedItem = require("../models/PurchasedItem");
 
 const router = express.Router();
 
@@ -52,6 +53,46 @@ router.get("/api/items", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch items" });
+  }
+});
+
+router.delete("/api/items/:id", async (req, res) => {
+  try {
+    await ShoppingListItem.destroy({ where: { id: req.params.id } });
+    res.status(204).end();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to delete item" });
+  }
+});
+
+router.post("/api/items/:id/check", async (req, res) => {
+  try {
+    const item = await ShoppingListItem.findByPk(req.params.id);
+    if (item) {
+      await PurchasedItem.create({
+        name: item.name,
+        category: item.category,
+        purchasedAt: new Date(),
+      });
+      await item.destroy();
+      res.status(200).end();
+    } else {
+      res.status(404).json({ error: "Item not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to check item" });
+  }
+});
+
+router.get("/api/purchased-items", async (req, res) => {
+  try {
+    const purchasedItems = await PurchasedItem.findAll();
+    res.json(purchasedItems);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch purchased items" });
   }
 });
 

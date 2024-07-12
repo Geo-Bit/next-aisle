@@ -3,7 +3,6 @@ import axios from "axios";
 
 function InputField() {
   const [item, setItem] = useState("");
-  const [aisle, setAisle] = useState("");
   const [items, setItems] = useState([]);
 
   useEffect(() => {
@@ -29,7 +28,6 @@ function InputField() {
         name: item,
       });
       console.log("Item added:", response.data);
-      setAisle(response.data.category);
       setItem("");
       fetchItems(); // Refresh the item list
     } catch (error) {
@@ -53,7 +51,6 @@ function InputField() {
           }}
         />
       </form>
-      {aisle && <p>Aisle: {aisle}</p>}
       <table className="item-table">
         <thead>
           <tr>
