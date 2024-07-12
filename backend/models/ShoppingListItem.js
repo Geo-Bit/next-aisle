@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database"); // Adjust the path if your config is elsewhere
+const sequelize = require("../config/database");
+const ShoppingList = require("./ShoppingList");
 
 const ShoppingListItem = sequelize.define("ShoppingListItem", {
   name: {
@@ -10,6 +11,17 @@ const ShoppingListItem = sequelize.define("ShoppingListItem", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  shoppingListId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: ShoppingList,
+      key: "id",
+    },
+  },
 });
+
+ShoppingList.hasMany(ShoppingListItem, { foreignKey: "shoppingListId" });
+ShoppingListItem.belongsTo(ShoppingList, { foreignKey: "shoppingListId" });
 
 module.exports = ShoppingListItem;

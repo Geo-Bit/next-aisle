@@ -105,6 +105,29 @@
     transform: translateX(26px);
   }
   
+  .shopping-lists {
+    margin-bottom: 20px;
+  }
+  
+  .shopping-lists select {
+    padding: 10px;
+    border: 2px solid var(--primary-color);
+    border-radius: 5px;
+  }
+  
+  .shopping-lists button {
+    padding: 10px;
+    border: 2px solid var(--primary-color);
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    cursor: pointer;
+  }
+  
+  .shopping-lists button:hover {
+    background-color: var(--accent-color);
+  }
+  
   .item-table, .purchased-item-table {
     margin-top: 20px;
     border-collapse: collapse;

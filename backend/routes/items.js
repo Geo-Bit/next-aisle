@@ -1,5 +1,6 @@
 const express = require("express");
 const axios = require("axios");
+const ShoppingList = require("../models/ShoppingList");
 const ShoppingListItem = require("../models/ShoppingListItem");
 const PurchasedItem = require("../models/PurchasedItem");
 
@@ -7,8 +8,30 @@ const router = express.Router();
 
 const customExclusions = ["sm", "lg"];
 
-router.post("/api/items", async (req, res) => {
+router.post("/api/shopping-lists", async (req, res) => {
   const { name } = req.body;
+
+  try {
+    const list = await ShoppingList.create({ name });
+    res.json(list);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to create shopping list" });
+  }
+});
+
+router.get("/api/shopping-lists", async (req, res) => {
+  try {
+    const lists = await ShoppingList.findAll();
+    res.json(lists);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch shopping lists" });
+  }
+});
+
+router.post("/api/items", async (req, res) => {
+  const { name, shoppingListId } = req.body;
 
   try {
     let strippedDescription = name.replace(/[^a-zA-Z ]+/g, "");
@@ -35,7 +58,11 @@ router.post("/api/items", async (req, res) => {
       aisle = response.data[0].aisle;
     }
 
-    const item = await ShoppingListItem.create({ name, category: aisle });
+    const item = await ShoppingListItem.create({
+      name,
+      category: aisle,
+      shoppingListId,
+    });
     res.json(item);
   } catch (error) {
     console.error(error);
@@ -44,8 +71,10 @@ router.post("/api/items", async (req, res) => {
 });
 
 router.get("/api/items", async (req, res) => {
+  const { shoppingListId } = req.query;
+
   try {
-    const items = await ShoppingListItem.findAll();
+    const items = await ShoppingListItem.findAll({ where: { shoppingListId } });
     res.json(items);
   } catch (error) {
     console.error(error);
@@ -80,16 +109,6 @@ router.post("/api/items/:id/check", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to check item" });
-  }
-});
-
-router.get("/api/purchased-items", async (req, res) => {
-  try {
-    const purchasedItems = await PurchasedItem.findAll();
-    res.json(purchasedItems);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to fetch purchased items" });
   }
 });
 
@@ -131,6 +150,16 @@ router.put("/api/items/:id", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to update item" });
+  }
+});
+
+router.get("/api/purchased-items", async (req, res) => {
+  try {
+    const purchasedItems = await PurchasedItem.findAll();
+    res.json(purchasedItems);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch purchased items" });
   }
 });
 

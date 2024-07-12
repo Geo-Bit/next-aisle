@@ -11,18 +11,42 @@ function App() {
   const [showPurchased, setShowPurchased] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [editedItemName, setEditedItemName] = useState("");
+  const [shoppingLists, setShoppingLists] = useState([]);
+  const [selectedList, setSelectedList] = useState(null);
 
   useEffect(() => {
-    fetchItems();
+    fetchShoppingLists();
   }, []);
+
+  useEffect(() => {
+    if (selectedList) {
+      fetchItems();
+    }
+  }, [selectedList]);
 
   useEffect(() => {
     document.body.className = darkMode ? "dark-mode" : "light-mode";
   }, [darkMode]);
 
+  const fetchShoppingLists = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:4000/api/shopping-lists"
+      );
+      setShoppingLists(response.data);
+      if (response.data.length > 0) {
+        setSelectedList(response.data[0].id);
+      }
+    } catch (error) {
+      console.error("Error fetching shopping lists:", error);
+    }
+  };
+
   const fetchItems = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/items");
+      const response = await axios.get("http://localhost:4000/api/items", {
+        params: { shoppingListId: selectedList },
+      });
       const sortedItems = response.data.sort((a, b) =>
         a.category.localeCompare(b.category)
       );
@@ -48,6 +72,7 @@ function App() {
     try {
       const response = await axios.post("http://localhost:4000/api/items", {
         name: item,
+        shoppingListId: selectedList,
       });
       console.log("Item added:", response.data);
       setItem("");
@@ -107,9 +132,43 @@ function App() {
     setEditedItemName("");
   };
 
+  const handleCreateShoppingList = async () => {
+    const name = prompt("Enter the name of the new shopping list:");
+    if (name) {
+      try {
+        const response = await axios.post(
+          "http://localhost:4000/api/shopping-lists",
+          { name }
+        );
+        setShoppingLists([...shoppingLists, response.data]);
+        setSelectedList(response.data.id);
+      } catch (error) {
+        console.error("Error creating shopping list:", error);
+      }
+    }
+  };
+
   return (
     <div className="app">
       <DarkModeToggle darkMode={darkMode} onToggle={handleToggleDarkMode} />
+      <div className="shopping-lists">
+        {shoppingLists.length > 0 ? (
+          <select
+            value={selectedList}
+            onChange={(e) => setSelectedList(e.target.value)}
+          >
+            {shoppingLists.map((list) => (
+              <option key={list.id} value={list.id}>
+                {list.name}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <button onClick={handleCreateShoppingList}>
+            + Create Shopping List
+          </button>
+        )}
+      </div>
       <button
         className="show-purchased-button"
         onClick={() => {
