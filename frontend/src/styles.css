@@ -109,3 +109,36 @@
     transform: translateX(26px);
   }
   
+  .item-table {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .item-table th, .item-table td {
+    padding: 12px;
+    border: 1px solid var(--primary-color);
+    text-align: left;
+  }
+  
+  .item-table th {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+  }
+  
+  .item-table td {
+    background-color: var(--background-light);
+    color: var(--text-light);
+  }
+  
+  .dark-mode .item-table th {
+    background-color: var(--accent-color);
+    color: var(--text-dark);
+  }
+  
+  .dark-mode .item-table td {
+    background-color: var(--background-dark);
+    color: var(--text-dark);
+  }
+  

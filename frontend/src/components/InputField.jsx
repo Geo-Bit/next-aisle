@@ -1,9 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function InputField() {
   const [item, setItem] = useState("");
   const [aisle, setAisle] = useState("");
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  const fetchItems = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/api/items");
+      setItems(response.data);
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,6 +28,7 @@ function InputField() {
       console.log("Item added:", response.data);
       setAisle(response.data.category);
       setItem("");
+      fetchItems(); // Refresh the item list
     } catch (error) {
       console.error("Error adding item:", error);
     }
@@ -28,12 +43,30 @@ function InputField() {
           value={item}
           onChange={(e) => setItem(e.target.value)}
           className="input-field"
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              handleSubmit(e);
+            }
+          }}
         />
-        <button type="submit" className="submit-button">
-          Add Item
-        </button>
       </form>
       {aisle && <p>Aisle: {aisle}</p>}
+      <table className="item-table">
+        <thead>
+          <tr>
+            <th>Shopping Item</th>
+            <th>Aisle</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item) => (
+            <tr key={item.id}>
+              <td>{item.name}</td>
+              <td>{item.category}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
