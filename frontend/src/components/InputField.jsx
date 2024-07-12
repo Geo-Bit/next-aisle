@@ -13,7 +13,10 @@ function InputField() {
   const fetchItems = async () => {
     try {
       const response = await axios.get("http://localhost:4000/api/items");
-      setItems(response.data);
+      const sortedItems = response.data.sort((a, b) =>
+        a.category.localeCompare(b.category)
+      );
+      setItems(sortedItems);
     } catch (error) {
       console.error("Error fetching items:", error);
     }
