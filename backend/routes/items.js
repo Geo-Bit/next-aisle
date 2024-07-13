@@ -30,8 +30,9 @@ router.get("/api/shopping-lists", async (req, res) => {
   }
 });
 
-router.post("/api/items", async (req, res) => {
-  const { name, shoppingListId } = req.body;
+router.post("/api/shopping-lists/:listId/items", async (req, res) => {
+  const { listId } = req.params;
+  const { name } = req.body;
 
   try {
     let strippedDescription = name.replace(/[^a-zA-Z ]+/g, "");
@@ -61,7 +62,7 @@ router.post("/api/items", async (req, res) => {
     const item = await ShoppingListItem.create({
       name,
       category: aisle,
-      shoppingListId,
+      shoppingListId: listId,
     });
     res.json(item);
   } catch (error) {
@@ -70,11 +71,13 @@ router.post("/api/items", async (req, res) => {
   }
 });
 
-router.get("/api/items", async (req, res) => {
-  const { shoppingListId } = req.query;
+router.get("/api/shopping-lists/:listId/items", async (req, res) => {
+  const { listId } = req.params;
 
   try {
-    const items = await ShoppingListItem.findAll({ where: { shoppingListId } });
+    const items = await ShoppingListItem.findAll({
+      where: { shoppingListId: listId },
+    });
     res.json(items);
   } catch (error) {
     console.error(error);

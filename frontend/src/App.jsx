@@ -13,6 +13,8 @@ function App() {
   const [editedItemName, setEditedItemName] = useState("");
   const [shoppingLists, setShoppingLists] = useState([]);
   const [selectedList, setSelectedList] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [newListName, setNewListName] = useState("");
 
   useEffect(() => {
     fetchShoppingLists();
@@ -31,7 +33,7 @@ function App() {
   const fetchShoppingLists = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/shopping-lists"
+        "http://127.0.0.1:4000/api/shopping-lists"
       );
       setShoppingLists(response.data);
       if (response.data.length > 0) {
@@ -43,10 +45,14 @@ function App() {
   };
 
   const fetchItems = async () => {
+    if (!selectedList) {
+      console.error("No selected list");
+      return;
+    }
     try {
-      const response = await axios.get("http://localhost:4000/api/items", {
-        params: { shoppingListId: selectedList },
-      });
+      const response = await axios.get(
+        `http://127.0.0.1:4000/api/shopping-lists/${selectedList}/items`
+      );
       const sortedItems = response.data.sort((a, b) =>
         a.category.localeCompare(b.category)
       );
@@ -59,7 +65,7 @@ function App() {
   const fetchPurchasedItems = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/purchased-items"
+        "http://127.0.0.1:4000/api/purchased-items"
       );
       setPurchasedItems(response.data);
     } catch (error) {
@@ -69,11 +75,17 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!selectedList) {
+      console.error("No selected list");
+      return;
+    }
     try {
-      const response = await axios.post("http://localhost:4000/api/items", {
-        name: item,
-        shoppingListId: selectedList,
-      });
+      const response = await axios.post(
+        `http://127.0.0.1:4000/api/shopping-lists/${selectedList}/items`,
+        {
+          name: item,
+        }
+      );
       console.log("Item added:", response.data);
       setItem("");
       fetchItems(); // Refresh the item list
@@ -88,7 +100,7 @@ function App() {
 
   const handleCheckItem = async (id) => {
     try {
-      await axios.post(`http://localhost:4000/api/items/${id}/check`);
+      await axios.post(`http://127.0.0.1:4000/api/items/${id}/check`);
       fetchItems();
     } catch (error) {
       console.error("Error checking item:", error);
@@ -97,7 +109,7 @@ function App() {
 
   const handleDeleteItem = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/api/items/${id}`);
+      await axios.delete(`http://127.0.0.1:4000/api/items/${id}`);
       fetchItems();
     } catch (error) {
       console.error("Error deleting item:", error);
@@ -113,7 +125,7 @@ function App() {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:4000/api/items/${editingItem.id}`,
+        `http://127.0.0.1:4000/api/items/${editingItem.id}`,
         {
           name: editedItemName,
         }
@@ -133,15 +145,21 @@ function App() {
   };
 
   const handleCreateShoppingList = async () => {
-    const name = prompt("Enter the name of the new shopping list:");
-    if (name) {
+    setShowModal(true);
+  };
+
+  const handleModalSubmit = async (e) => {
+    e.preventDefault();
+    if (newListName) {
       try {
         const response = await axios.post(
-          "http://localhost:4000/api/shopping-lists",
-          { name }
+          "http://127.0.0.1:4000/api/shopping-lists",
+          { name: newListName }
         );
         setShoppingLists([...shoppingLists, response.data]);
         setSelectedList(response.data.id);
+        setNewListName("");
+        setShowModal(false);
       } catch (error) {
         console.error("Error creating shopping list:", error);
       }
@@ -151,23 +169,55 @@ function App() {
   return (
     <div className="app">
       <DarkModeToggle darkMode={darkMode} onToggle={handleToggleDarkMode} />
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <button className="close-modal" onClick={() => setShowModal(false)}>
+              ✖
+            </button>
+            <form onSubmit={handleModalSubmit}>
+              <label>
+                New Shopping List Name:
+                <input
+                  type="text"
+                  value={newListName}
+                  onChange={(e) => setNewListName(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      handleModalSubmit(e);
+                    }
+                  }}
+                />
+              </label>
+            </form>
+          </div>
+        </div>
+      )}
+      <form onSubmit={handleSubmit} className="input-form">
+        <input
+          type="text"
+          placeholder="Enter grocery item"
+          value={item}
+          onChange={(e) => setItem(e.target.value)}
+          className="input-field"
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              handleSubmit(e);
+            }
+          }}
+        />
+      </form>
       <div className="shopping-lists">
-        {shoppingLists.length > 0 ? (
-          <select
-            value={selectedList}
-            onChange={(e) => setSelectedList(e.target.value)}
+        <button onClick={handleCreateShoppingList}>+</button>
+        {shoppingLists.map((list) => (
+          <button
+            key={list.id}
+            className={selectedList === list.id ? "selected" : ""}
+            onClick={() => setSelectedList(list.id)}
           >
-            {shoppingLists.map((list) => (
-              <option key={list.id} value={list.id}>
-                {list.name}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <button onClick={handleCreateShoppingList}>
-            + Create Shopping List
+            {list.name}
           </button>
-        )}
+        ))}
       </div>
       <button
         className="show-purchased-button"
@@ -200,20 +250,6 @@ function App() {
           </tbody>
         </table>
       )}
-      <form onSubmit={handleSubmit} className="input-form">
-        <input
-          type="text"
-          placeholder="Enter grocery item"
-          value={item}
-          onChange={(e) => setItem(e.target.value)}
-          className="input-field"
-          onKeyPress={(e) => {
-            if (e.key === "Enter") {
-              handleSubmit(e);
-            }
-          }}
-        />
-      </form>
       {editingItem && (
         <form onSubmit={handleUpdateItem} className="input-form">
           <input
@@ -243,7 +279,12 @@ function App() {
               <td>{item.name}</td>
               <td>{item.category}</td>
               <td>
-                <button onClick={() => handleCheckItem(item.id)}>✔️</button>
+                <button
+                  className="check-button"
+                  onClick={() => handleCheckItem(item.id)}
+                >
+                  ✔️
+                </button>
                 <button onClick={() => handleDeleteItem(item.id)}>❌</button>
                 <button onClick={() => handleEditItem(item)}>✏️</button>
               </td>

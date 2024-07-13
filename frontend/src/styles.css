@@ -1,203 +1,265 @@
 :root {
-    --background-light: #ffffff;
-    --background-dark: #282a36;
-    --text-light: #000000;
-    --text-dark: #f8f8f2;
-    --primary-color: #6272a4;
-    --accent-color: #ff79c6;
-  }
-  
-  body {
-    margin: 0;
-    font-family: 'Arial', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-    transition: background 0.3s, color 0.3s;
-  }
-  
-  body.light-mode {
-    background-color: var(--background-light);
-    color: var(--text-light);
-  }
-  
-  body.dark-mode {
-    background-color: var(--background-dark);
-    color: var(--text-dark);
-  }
-  
-  .app {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 90%;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  .input-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-  }
-  
+  --background-light: #ffffff;
+  --background-dark: #282a36;
+  --text-light: #000000;
+  --text-dark: #f8f8f2;
+  --primary-color: #6272a4;
+  --accent-color: #ff79c6;
+  --checkmark-color: #2AAA52; /* Green color */
+}
+
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  transition: background 0.3s, color 0.3s;
+}
+
+body.light-mode {
+  background-color: var(--background-light);
+  color: var(--text-light);
+}
+
+body.dark-mode {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.input-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.input-field {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.dark-mode-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--primary-color);
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--accent-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.shopping-lists {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.shopping-lists button {
+  padding: 10px;
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.shopping-lists button.selected {
+  background-color: var(--accent-color);
+}
+
+.shopping-lists button:hover {
+  background-color: var(--accent-color);
+}
+
+.item-table, .purchased-item-table {
+  margin-top: 20px;
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;  /* Ensure all text fits on a single line */
+}
+
+.item-table th, .item-table td, .purchased-item-table th, .purchased-item-table td {
+  padding: 12px;
+  border: 1px solid var(--primary-color);
+  text-align: left;
+  white-space: nowrap;  /* Ensure all text fits on a single line */
+  overflow: hidden;     /* Prevent text overflow */
+  text-overflow: ellipsis; /* Add ellipsis if text overflows */
+}
+
+.item-table th, .purchased-item-table th {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+}
+
+.item-table td, .purchased-item-table td {
+  background-color: var(--background-light);
+  color: var(--text-light);
+}
+
+.dark-mode .item-table th, .dark-mode .purchased-item-table th {
+  background-color: var(--accent-color);
+  color: var(--text-dark);
+}
+
+.dark-mode .item-table td, .dark-mode .purchased-item-table td {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
+.item-table button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2em;
+}
+
+.item-table button.check-button {
+  color: transparent;
+  text-shadow: 0 0 0 var(--checkmark-color); /* Green checkmark */
+}
+
+.item-table button:focus {
+  outline: none;
+}
+
+.show-purchased-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.show-purchased-button:hover {
+  background-color: var(--accent-color);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: var(--background-light);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+body.dark-mode .modal-content {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
+.modal-content label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.modal-content input[type="text"] {
+  padding: 10px;
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  width: 100%;
+}
+
+.modal-content .close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: var(--text-light);
+}
+
+body.dark-mode .modal-content .close-modal {
+  color: var(--text-dark);
+}
+
+.modal-content .close-modal:hover {
+  color: var(--accent-color);
+}
+
+@media (max-width: 600px) {
   .input-field {
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 2px solid var(--primary-color);
-    border-radius: 5px;
-    width: 100%;
-    max-width: 400px;
+    max-width: 100%;
   }
-  
-  .dark-mode-toggle {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-  }
-  
-  .switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-  }
-  
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--primary-color);
-    transition: .4s;
-    border-radius: 34px;
-  }
-  
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
-  }
-  
-  input:checked + .slider {
-    background-color: var(--accent-color);
-  }
-  
-  input:checked + .slider:before {
-    transform: translateX(26px);
-  }
-  
-  .shopping-lists {
-    margin-bottom: 20px;
-  }
-  
-  .shopping-lists select {
-    padding: 10px;
-    border: 2px solid var(--primary-color);
-    border-radius: 5px;
-  }
-  
-  .shopping-lists button {
-    padding: 10px;
-    border: 2px solid var(--primary-color);
-    border-radius: 5px;
-    background-color: var(--primary-color);
-    color: var(--text-light);
-    cursor: pointer;
-  }
-  
-  .shopping-lists button:hover {
-    background-color: var(--accent-color);
-  }
-  
-  .item-table, .purchased-item-table {
-    margin-top: 20px;
-    border-collapse: collapse;
-    width: 100%;
-    table-layout: fixed;  /* Ensure all text fits on a single line */
-  }
-  
+
   .item-table th, .item-table td, .purchased-item-table th, .purchased-item-table td {
-    padding: 12px;
-    border: 1px solid var(--primary-color);
-    text-align: left;
-    white-space: nowrap;  /* Ensure all text fits on a single line */
-    overflow: hidden;     /* Prevent text overflow */
-    text-overflow: ellipsis; /* Add ellipsis if text overflows */
+    padding: 8px;
   }
-  
-  .item-table th, .purchased-item-table th {
-    background-color: var(--primary-color);
-    color: var(--text-light);
-  }
-  
-  .item-table td, .purchased-item-table td {
-    background-color: var(--background-light);
-    color: var(--text-light);
-  }
-  
-  .dark-mode .item-table th, .dark-mode .purchased-item-table th {
-    background-color: var(--accent-color);
-    color: var(--text-dark);
-  }
-  
-  .dark-mode .item-table td, .dark-mode .purchased-item-table td {
-    background-color: var(--background-dark);
-    color: var(--text-dark);
-  }
-  
-  .item-table button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2em;
-  }
-  
-  .item-table button:focus {
-    outline: none;
-  }
-  
-  .show-purchased-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    padding: 10px 20px;
-    background-color: var(--primary-color);
-    color: var(--text-light);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .show-purchased-button:hover {
-    background-color: var(--accent-color);
-  }
-  
-  @media (max-width: 600px) {
-    .input-field {
-      max-width: 100%;
-    }
-    
-    .item-table th, .item-table td, .purchased-item-table th, .purchased-item-table td {
-      padding: 8px;
-    }
-  }
-  
+}
