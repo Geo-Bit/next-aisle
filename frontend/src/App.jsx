@@ -16,6 +16,8 @@ function App() {
   const [selectedList, setSelectedList] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [newListName, setNewListName] = useState("");
+  const [showSettings, setShowSettings] = useState(false);
+  const [recommendationPeriod, setRecommendationPeriod] = useState(14); // Default to two weeks
 
   useEffect(() => {
     fetchShoppingLists();
@@ -196,9 +198,79 @@ function App() {
     }
   };
 
+  const handleOpenSettings = () => {
+    setShowSettings(true);
+  };
+
+  const handleCloseSettings = () => {
+    setShowSettings(false);
+  };
+
+  const handleUpdateRecommendationPeriod = async (e) => {
+    e.preventDefault();
+    const newPeriod = parseInt(e.target.recommendationPeriod.value);
+    if (!isNaN(newPeriod) && newPeriod > 0) {
+      setRecommendationPeriod(newPeriod);
+      handleCloseSettings();
+    }
+  };
+
   return (
     <div className="app">
       <DarkModeToggle darkMode={darkMode} onToggle={handleToggleDarkMode} />
+      <button className="settings-button" onClick={handleOpenSettings}>
+        ⚙️
+      </button>
+      {showSettings && (
+        <div className={`modal ${darkMode ? "dark-mode" : "light-mode"}`}>
+          <div className="modal-content">
+            <span className="close" onClick={handleCloseSettings}>
+              &times;
+            </span>
+            <form onSubmit={handleUpdateRecommendationPeriod}>
+              <label>
+                Recommendation Period (days):
+                <input
+                  type="number"
+                  name="recommendationPeriod"
+                  defaultValue={recommendationPeriod}
+                />
+              </label>
+              <button type="submit">Update</button>
+            </form>
+            <button
+              onClick={() => {
+                setShowPurchased(!showPurchased);
+                if (!showPurchased) {
+                  fetchPurchasedItems();
+                }
+              }}
+            >
+              {showPurchased ? "Hide Purchased Items" : "Show Purchased Items"}
+            </button>
+            {showPurchased && (
+              <table className="purchased-item-table">
+                <thead>
+                  <tr>
+                    <th>Shopping Item</th>
+                    <th>Aisle</th>
+                    <th>Purchased At</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {purchasedItems.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.name}</td>
+                      <td>{item.category}</td>
+                      <td>{new Date(item.purchasedAt).toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </div>
+      )}
       {showModal && (
         <div className="modal">
           <div className="modal-content">
@@ -249,37 +321,6 @@ function App() {
           </button>
         ))}
       </div>
-      <button
-        className="show-purchased-button"
-        onClick={() => {
-          setShowPurchased(!showPurchased);
-          if (!showPurchased) {
-            fetchPurchasedItems();
-          }
-        }}
-      >
-        {showPurchased ? "Hide Purchased Items" : "Show Purchased Items"}
-      </button>
-      {showPurchased && (
-        <table className="purchased-item-table">
-          <thead>
-            <tr>
-              <th>Shopping Item</th>
-              <th>Aisle</th>
-              <th>Purchased At</th>
-            </tr>
-          </thead>
-          <tbody>
-            {purchasedItems.map((item) => (
-              <tr key={item.id}>
-                <td>{item.name}</td>
-                <td>{item.category}</td>
-                <td>{new Date(item.purchasedAt).toLocaleString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
       {editingItem && (
         <form onSubmit={handleUpdateItem} className="input-form">
           <input
