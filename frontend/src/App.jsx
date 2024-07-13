@@ -7,6 +7,7 @@ function App() {
   const [item, setItem] = useState("");
   const [items, setItems] = useState([]);
   const [purchasedItems, setPurchasedItems] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const [darkMode, setDarkMode] = useState(true); // Default to dark mode
   const [showPurchased, setShowPurchased] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
@@ -23,6 +24,7 @@ function App() {
   useEffect(() => {
     if (selectedList) {
       fetchItems();
+      fetchRecommendations();
     }
   }, [selectedList]);
 
@@ -33,7 +35,7 @@ function App() {
   const fetchShoppingLists = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:4000/api/shopping-lists"
+        "http://localhost:4000/api/shopping-lists"
       );
       setShoppingLists(response.data);
       if (response.data.length > 0) {
@@ -45,13 +47,9 @@ function App() {
   };
 
   const fetchItems = async () => {
-    if (!selectedList) {
-      console.error("No selected list");
-      return;
-    }
     try {
       const response = await axios.get(
-        `http://127.0.0.1:4000/api/shopping-lists/${selectedList}/items`
+        `http://localhost:4000/api/shopping-lists/${selectedList}/items`
       );
       const sortedItems = response.data.sort((a, b) =>
         a.category.localeCompare(b.category)
@@ -65,7 +63,7 @@ function App() {
   const fetchPurchasedItems = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:4000/api/purchased-items"
+        "http://localhost:4000/api/purchased-items"
       );
       setPurchasedItems(response.data);
     } catch (error) {
@@ -73,15 +71,27 @@ function App() {
     }
   };
 
+  const fetchRecommendations = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:4000/api/recommendations"
+      );
+      setRecommendations(response.data);
+    } catch (error) {
+      console.error("Error fetching recommendations:", error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedList) {
-      console.error("No selected list");
+      alert("Please select a shopping list first.");
       return;
     }
+
     try {
       const response = await axios.post(
-        `http://127.0.0.1:4000/api/shopping-lists/${selectedList}/items`,
+        `http://localhost:4000/api/shopping-lists/${selectedList}/items`,
         {
           name: item,
         }
@@ -100,7 +110,7 @@ function App() {
 
   const handleCheckItem = async (id) => {
     try {
-      await axios.post(`http://127.0.0.1:4000/api/items/${id}/check`);
+      await axios.post(`http://localhost:4000/api/items/${id}/check`);
       fetchItems();
     } catch (error) {
       console.error("Error checking item:", error);
@@ -109,7 +119,7 @@ function App() {
 
   const handleDeleteItem = async (id) => {
     try {
-      await axios.delete(`http://127.0.0.1:4000/api/items/${id}`);
+      await axios.delete(`http://localhost:4000/api/items/${id}`);
       fetchItems();
     } catch (error) {
       console.error("Error deleting item:", error);
@@ -125,7 +135,7 @@ function App() {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://127.0.0.1:4000/api/items/${editingItem.id}`,
+        `http://localhost:4000/api/items/${editingItem.id}`,
         {
           name: editedItemName,
         }
@@ -153,7 +163,7 @@ function App() {
     if (newListName) {
       try {
         const response = await axios.post(
-          "http://127.0.0.1:4000/api/shopping-lists",
+          "http://localhost:4000/api/shopping-lists",
           { name: newListName }
         );
         setShoppingLists([...shoppingLists, response.data]);
@@ -163,6 +173,26 @@ function App() {
       } catch (error) {
         console.error("Error creating shopping list:", error);
       }
+    }
+  };
+
+  const handleAddRecommendedItem = async (itemName) => {
+    if (!selectedList) {
+      alert("Please select a shopping list first.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `http://localhost:4000/api/shopping-lists/${selectedList}/items`,
+        {
+          name: itemName,
+        }
+      );
+      console.log("Recommended item added:", response.data);
+      fetchItems(); // Refresh the item list
+    } catch (error) {
+      console.error("Error adding recommended item:", error);
     }
   };
 
@@ -292,6 +322,20 @@ function App() {
           ))}
         </tbody>
       </table>
+      <div className="recommendations">
+        <h3>Recommendations</h3>
+        <div className="recommendation-buttons">
+          {recommendations.map((item, index) => (
+            <button
+              key={index}
+              className="recommendation-button"
+              onClick={() => handleAddRecommendedItem(item.name)}
+            >
+              {item.name}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

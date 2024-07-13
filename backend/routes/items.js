@@ -1,5 +1,7 @@
 const express = require("express");
 const axios = require("axios");
+const { Op } = require("sequelize");
+const sequelize = require("../config/database");
 const ShoppingList = require("../models/ShoppingList");
 const ShoppingListItem = require("../models/ShoppingListItem");
 const PurchasedItem = require("../models/PurchasedItem");
@@ -73,6 +75,7 @@ router.post("/api/shopping-lists/:listId/items", async (req, res) => {
 
 router.get("/api/shopping-lists/:listId/items", async (req, res) => {
   const { listId } = req.params;
+  console.log("Fetching items for shopping list ID:", listId); // Debugging line
 
   try {
     const items = await ShoppingListItem.findAll({
@@ -163,6 +166,34 @@ router.get("/api/purchased-items", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch purchased items" });
+  }
+});
+
+router.get("/api/recommendations", async (req, res) => {
+  const twoWeeksAgo = new Date();
+  twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+
+  try {
+    const recommendations = await PurchasedItem.findAll({
+      attributes: [
+        "name",
+        "category",
+        [sequelize.fn("COUNT", sequelize.col("name")), "count"],
+      ],
+      where: {
+        purchasedAt: {
+          [Op.gte]: twoWeeksAgo,
+        },
+      },
+      group: ["name", "category"],
+      having: sequelize.literal("COUNT(name) > 2"),
+      order: [[sequelize.literal("count"), "DESC"]],
+    });
+
+    res.json(recommendations);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch recommendations" });
   }
 });
 
