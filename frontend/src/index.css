@@ -1,288 +1,68 @@
 :root {
-  --background-light: #ffffff;
-  --background-dark: #282a36;
-  --text-light: #000000;
-  --text-dark: #f8f8f2;
-  --primary-color: #6272a4;
-  --accent-color: #ff79c6;
-  --check-button-color: #2aaa52;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
 }
 
 body {
   margin: 0;
-  font-family: "Arial", sans-serif;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-  transition: background 0.3s, color 0.3s;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
 }
 
-body.light-mode {
-  background-color: var(--background-light);
-  color: var(--text-light);
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
 }
 
-body.dark-mode {
-  background-color: var(--background-dark);
-  color: var(--text-dark);
-}
-
-.app {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 90%;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.input-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.input-field {
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 2px solid var(--primary-color);
-  border-radius: 5px;
-  width: 100%;
-  max-width: 400px;
-}
-
-.dark-mode-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--primary-color);
-  transition: 0.4s;
-  border-radius: 34px;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: 0.4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: var(--accent-color);
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
-}
-
-.shopping-lists {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.shopping-lists button {
-  padding: 10px;
-  margin: 5px;
-  border: 2px solid var(--primary-color);
-  border-radius: 5px;
-  background-color: var(--primary-color);
-  color: var(--text-light);
-  cursor: pointer;
-}
-
-.shopping-lists button.selected {
-  background-color: var(--accent-color);
-}
-
-.shopping-lists button:hover {
-  background-color: var(--accent-color);
-}
-
-.item-table,
-.purchased-item-table {
-  margin-top: 20px;
-  border-collapse: collapse;
-  width: 100%;
-  table-layout: fixed; /* Ensure all text fits on a single line */
-}
-
-.item-table th,
-.item-table td,
-.purchased-item-table th,
-.purchased-item-table td {
-  padding: 12px;
-  border: 1px solid var(--primary-color);
-  text-align: left;
-  white-space: nowrap; /* Ensure all text fits on a single line */
-  overflow: hidden; /* Prevent text overflow */
-  text-overflow: ellipsis; /* Add ellipsis if text overflows */
-}
-
-.item-table th,
-.purchased-item-table th {
-  background-color: var(--primary-color);
-  color: var(--text-light);
-}
-
-.item-table td,
-.purchased-item-table td {
-  background-color: var(--background-light);
-  color: var(--text-light);
-}
-
-.dark-mode .item-table th,
-.dark-mode .purchased-item-table th {
-  background-color: var(--accent-color);
-  color: var(--text-dark);
-}
-
-.dark-mode .item-table td,
-.dark-mode .purchased-item-table td {
-  background-color: var(--background-dark);
-  color: var(--text-dark);
-}
-
-.item-table button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.2em;
-}
-
-.item-table button:focus {
-  outline: none;
-}
-
-.check-button {
-  color: transparent;
-  text-shadow: 0 0 0 var(--check-button-color);
-}
-
-.show-purchased-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  padding: 10px 20px;
-  background-color: var(--primary-color);
-  color: var(--text-light);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.show-purchased-button:hover {
-  background-color: var(--accent-color);
-}
-
-.recommendations {
-  margin-top: 20px;
-  width: 100%;
-  text-align: center;
-}
-
-.recommendations h3 {
-  margin-bottom: 10px;
-}
-
-.recommendation-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.recommendation-button {
-  padding: 10px;
-  margin: 5px;
-  border: 2px solid var(--primary-color);
-  border-radius: 5px;
-  background-color: var(--primary-color);
-  color: var(--text-light);
-  cursor: pointer;
-}
-
-.recommendation-button:hover {
-  background-color: var(--accent-color);
-}
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background-color: var(--background-light);
-  padding: 20px;
-  border-radius: 5px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.dark-mode .modal-content {
-  background-color: var(--background-dark);
-  color: var(--text-dark);
-}
-
-.close-modal {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  cursor: pointer;
-  color: var(--text-light);
-}
-
-@media (max-width: 600px) {
-  .input-field {
-    max-width: 100%;
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
   }
-
-  .item-table th,
-  .item-table td,
-  .purchased-item-table th,
-  .purchased-item-table td {
-    padding: 8px;
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
   }
 }

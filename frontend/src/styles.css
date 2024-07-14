@@ -5,7 +5,6 @@
   --text-dark: #f8f8f2;
   --primary-color: #6272a4;
   --accent-color: #ff79c6;
-  --checkmark-color: #2AAA52; /* Green color */
 }
 
 body {
@@ -107,9 +106,9 @@ input:checked + .slider:before {
 }
 
 .shopping-lists {
-  display: flex;
-  justify-content: center;
   margin-bottom: 20px;
+  display: flex;
+  gap: 10px; /* Add spacing between buttons */
 }
 
 .shopping-lists button {
@@ -119,11 +118,6 @@ input:checked + .slider:before {
   background-color: var(--primary-color);
   color: var(--text-light);
   cursor: pointer;
-  margin-right: 10px;
-}
-
-.shopping-lists button.selected {
-  background-color: var(--accent-color);
 }
 
 .shopping-lists button:hover {
@@ -166,102 +160,16 @@ input:checked + .slider:before {
   color: var(--text-dark);
 }
 
-.item-table button {
+.check-button, .delete-button, .edit-button {
   background: none;
   border: none;
   cursor: pointer;
   font-size: 1.2em;
+  color: white; /* Ensure icons are white */
 }
 
-.item-table button.check-button {
-  color: transparent;
-  text-shadow: 0 0 0 var(--checkmark-color); /* Green checkmark */
-}
-
-.item-table button:focus {
+.check-button:focus, .delete-button:focus, .edit-button:focus {
   outline: none;
-}
-
-.show-purchased-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  padding: 10px 20px;
-  background-color: var(--primary-color);
-  color: var(--text-light);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.show-purchased-button:hover {
-  background-color: var(--accent-color);
-}
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-  background-color: var(--background-light);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  position: relative;
-}
-
-body.dark-mode .modal-content {
-  background-color: var(--background-dark);
-  color: var(--text-dark);
-}
-
-.modal-content label {
-  display: block;
-  margin-bottom: 10px;
-}
-
-.modal-content input[type="text"] {
-  padding: 10px;
-  border: 2px solid var(--primary-color);
-  border-radius: 5px;
-  width: 100%;
-}
-
-.modal-content .close-modal {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  cursor: pointer;
-  color: var(--text-light);
-}
-
-body.dark-mode .modal-content .close-modal {
-  color: var(--text-dark);
-}
-
-.modal-content .close-modal:hover {
-  color: var(--accent-color);
-}
-
-@media (max-width: 600px) {
-  .input-field {
-    max-width: 100%;
-  }
-
-  .item-table th, .item-table td, .purchased-item-table th, .purchased-item-table td {
-    padding: 8px;
-  }
 }
 
 .settings-button {
@@ -272,7 +180,7 @@ body.dark-mode .modal-content .close-modal {
   cursor: pointer;
   background: none;
   border: none;
-  color: var(--text-light);
+  color: var(--text-light); /* Ensure the icon is white */
 }
 
 .settings-button:focus {
@@ -308,15 +216,20 @@ body.dark-mode .modal-content .close-modal {
   color: var(--text-dark);
 }
 
-.close {
+.close,
+.close-modal {
   color: var(--text-light);
   float: right;
   font-size: 28px;
   font-weight: bold;
+  background: none;
+  border: none;
 }
 
 .close:hover,
-.close:focus {
+.close:focus,
+.close-modal:hover,
+.close-modal:focus {
   color: var(--accent-color);
   text-decoration: none;
   cursor: pointer;
@@ -339,4 +252,14 @@ body.dark-mode .modal-content .close-modal {
 
 .recommendation-button:hover {
   background-color: var(--accent-color);
+}
+
+@media (max-width: 600px) {
+  .input-field {
+    max-width: 100%;
+  }
+  
+  .item-table th, .item-table td, .purchased-item-table th, .purchased-item-table td {
+    padding: 8px;
+  }
 }

@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCheck,
+  faTrashAlt,
+  faEdit,
+  faCog,
+} from "@fortawesome/free-solid-svg-icons";
 import DarkModeToggle from "./components/DarkModeToggle";
 import "./styles.css";
 
@@ -76,7 +83,7 @@ function App() {
   const fetchRecommendations = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/recommendations"
+        `http://localhost:4000/api/recommendations?period=${recommendationPeriod}`
       );
       setRecommendations(response.data);
     } catch (error) {
@@ -198,47 +205,38 @@ function App() {
     }
   };
 
-  const handleOpenSettings = () => {
-    setShowSettings(true);
+  const handleSettingsToggle = () => {
+    setShowSettings(!showSettings);
   };
 
-  const handleCloseSettings = () => {
-    setShowSettings(false);
-  };
-
-  const handleUpdateRecommendationPeriod = async (e) => {
-    e.preventDefault();
-    const newPeriod = parseInt(e.target.recommendationPeriod.value);
-    if (!isNaN(newPeriod) && newPeriod > 0) {
-      setRecommendationPeriod(newPeriod);
-      handleCloseSettings();
-    }
+  const handleRecommendationPeriodChange = (e) => {
+    setRecommendationPeriod(e.target.value);
+    fetchRecommendations();
   };
 
   return (
     <div className="app">
       <DarkModeToggle darkMode={darkMode} onToggle={handleToggleDarkMode} />
-      <button className="settings-button" onClick={handleOpenSettings}>
-        ⚙️
+      <button className="settings-button" onClick={handleSettingsToggle}>
+        <FontAwesomeIcon icon={faCog} />
       </button>
       {showSettings && (
-        <div className={`modal ${darkMode ? "dark-mode" : "light-mode"}`}>
-          <div className="modal-content">
-            <span className="close" onClick={handleCloseSettings}>
-              &times;
-            </span>
-            <form onSubmit={handleUpdateRecommendationPeriod}>
-              <label>
-                Recommendation Period (days):
-                <input
-                  type="number"
-                  name="recommendationPeriod"
-                  defaultValue={recommendationPeriod}
-                />
-              </label>
-              <button type="submit">Update</button>
-            </form>
+        <div className="modal">
+          <div className={`modal-content ${darkMode ? "dark-mode" : ""}`}>
+            <button className="close-modal" onClick={handleSettingsToggle}>
+              ✖
+            </button>
+            <h2>Settings</h2>
+            <label>
+              Recommendation Period (days):
+              <input
+                type="number"
+                value={recommendationPeriod}
+                onChange={handleRecommendationPeriodChange}
+              />
+            </label>
             <button
+              className="show-purchased-button"
               onClick={() => {
                 setShowPurchased(!showPurchased);
                 if (!showPurchased) {
@@ -273,7 +271,7 @@ function App() {
       )}
       {showModal && (
         <div className="modal">
-          <div className="modal-content">
+          <div className={`modal-content ${darkMode ? "dark-mode" : ""}`}>
             <button className="close-modal" onClick={() => setShowModal(false)}>
               ✖
             </button>
@@ -354,10 +352,20 @@ function App() {
                   className="check-button"
                   onClick={() => handleCheckItem(item.id)}
                 >
-                  ✔️
+                  <FontAwesomeIcon icon={faCheck} />
                 </button>
-                <button onClick={() => handleDeleteItem(item.id)}>❌</button>
-                <button onClick={() => handleEditItem(item)}>✏️</button>
+                <button
+                  className="delete-button"
+                  onClick={() => handleDeleteItem(item.id)}
+                >
+                  <FontAwesomeIcon icon={faTrashAlt} />
+                </button>
+                <button
+                  className="edit-button"
+                  onClick={() => handleEditItem(item)}
+                >
+                  <FontAwesomeIcon icon={faEdit} />
+                </button>
               </td>
             </tr>
           ))}
