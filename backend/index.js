@@ -13,7 +13,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // Ensure this matches your frontend's URL
+    origin: "http://localhost:3500", // Ensure this matches your frontend's URL
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: ["Content-Type"],
   })
