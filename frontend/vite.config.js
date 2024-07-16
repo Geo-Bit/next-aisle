@@ -6,10 +6,13 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: "0.0.0.0",
-    port: 3500,
+    port: 8081,
     strictPort: true,
     hmr: {
       host: "localhost",
     },
+  },
+  define: {
+    "process.env": {}, // This is to prevent errors if process.env is accidentally used
   },
 });

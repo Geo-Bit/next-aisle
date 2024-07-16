@@ -12,8 +12,7 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
-    env_file:
-      - .env
+    env_file: ./backend/.env.development
 
   backend:
     build: ./backend
@@ -27,21 +26,19 @@ services:
       - db
     # Comment out the command temporarily
     # command: bash -c "npx sequelize-cli db:migrate && node index.js"
-    env_file:
-      - .env
+    env_file: ./backend/.env.development
 
   frontend:
     build: ./frontend
     ports:
-      - "3000:3000"
+      - "8081:8081"
     depends_on:
       - backend
     command: ["npm", "run", "dev"]
     environment:
       - VITE_HOST=0.0.0.0
-      - VITE_PORT=3000
-    env_file:
-      - .env
+      - VITE_PORT=8081
+    env_file: ./frontend/.env.development
 
 volumes:
   db_data:

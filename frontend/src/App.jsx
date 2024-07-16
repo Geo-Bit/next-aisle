@@ -25,7 +25,8 @@ function App() {
   const [newListName, setNewListName] = useState("");
   const [showSettings, setShowSettings] = useState(false);
   const [recommendationPeriod, setRecommendationPeriod] = useState(14); // Default to two weeks
-
+  const API_BASE_URL =
+    process.env.REACT_APP_API_BASE_URL || "http://localhost:4000";
   useEffect(() => {
     fetchShoppingLists();
   }, []);
@@ -43,9 +44,7 @@ function App() {
 
   const fetchShoppingLists = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:4000/api/shopping-lists"
-      );
+      const response = await axios.get(`${API_BASE_URL}/api/shopping-lists`);
       setShoppingLists(response.data);
       if (response.data.length > 0) {
         setSelectedList(response.data[0].id);
@@ -58,7 +57,7 @@ function App() {
   const fetchItems = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/shopping-lists/${selectedList}/items`
+        `${API_BASE_URL}/api/shopping-lists/${selectedList}/items`
       );
       const sortedItems = response.data.sort((a, b) =>
         a.category.localeCompare(b.category)
@@ -71,9 +70,7 @@ function App() {
 
   const fetchPurchasedItems = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:4000/api/purchased-items"
-      );
+      const response = await axios.get(`${API_BASE_URL}/api/purchased-items`);
       setPurchasedItems(response.data);
     } catch (error) {
       console.error("Error fetching purchased items:", error);
@@ -83,7 +80,7 @@ function App() {
   const fetchRecommendations = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/recommendations?period=${recommendationPeriod}`
+        `${API_BASE_URL}/api/recommendations?period=${recommendationPeriod}`
       );
       setRecommendations(response.data);
     } catch (error) {
@@ -100,7 +97,7 @@ function App() {
 
     try {
       const response = await axios.post(
-        `http://localhost:4000/api/shopping-lists/${selectedList}/items`,
+        `${API_BASE_URL}/api/shopping-lists/${selectedList}/items`,
         {
           name: item,
         }
@@ -119,7 +116,7 @@ function App() {
 
   const handleCheckItem = async (id) => {
     try {
-      await axios.post(`http://localhost:4000/api/items/${id}/check`);
+      await axios.post(`${API_BASE_URL}/api/items/${id}/check`);
       fetchItems();
     } catch (error) {
       console.error("Error checking item:", error);
@@ -128,7 +125,7 @@ function App() {
 
   const handleDeleteItem = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/api/items/${id}`);
+      await axios.delete(`${API_BASE_URL}/api/items/${id}`);
       fetchItems();
     } catch (error) {
       console.error("Error deleting item:", error);
@@ -144,7 +141,7 @@ function App() {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:4000/api/items/${editingItem.id}`,
+        `${API_BASE_URL}/api/items/${editingItem.id}`,
         {
           name: editedItemName,
         }
@@ -172,7 +169,7 @@ function App() {
     if (newListName) {
       try {
         const response = await axios.post(
-          "http://localhost:4000/api/shopping-lists",
+          `${API_BASE_URL}/api/shopping-lists`,
           { name: newListName }
         );
         setShoppingLists([...shoppingLists, response.data]);
@@ -193,7 +190,7 @@ function App() {
 
     try {
       const response = await axios.post(
-        `http://localhost:4000/api/shopping-lists/${selectedList}/items`,
+        `${API_BASE_URL}/api/shopping-lists/${selectedList}/items`,
         {
           name: itemName,
         }
