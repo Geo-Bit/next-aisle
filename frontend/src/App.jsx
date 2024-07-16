@@ -25,7 +25,7 @@ function App() {
   const [newListName, setNewListName] = useState("");
   const [showSettings, setShowSettings] = useState(false);
   const [recommendationPeriod, setRecommendationPeriod] = useState(14); // Default to two weeks
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     fetchShoppingLists();
