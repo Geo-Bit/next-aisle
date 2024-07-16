@@ -10,6 +10,7 @@ export default defineConfig({
     strictPort: true,
     hmr: {
       host: `${process.env.VITE_HOST}`,
+      port: 3000,
     },
   },
   define: {
