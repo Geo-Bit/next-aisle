@@ -8,10 +8,6 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 8081,
     strictPort: true,
-    hmr: {
-      protocol: "ws",
-      port: 3000,
-    },
   },
   define: {
     "process.env": {
