@@ -9,7 +9,7 @@ export default defineConfig({
     port: 8081,
     strictPort: true,
     hmr: {
-      host: `${process.env.VITE_HOST}`,
+      protocol: "ws",
       port: 3000,
     },
   },
@@ -17,6 +17,6 @@ export default defineConfig({
     "process.env": {
       REACT_APP_API_BASE_URL:
         process.env.REACT_APP_API_BASE_URL || "http://localhost:4000",
-    }, // This is to prevent errors if process.env is accidentally used
+    },
   },
 });
