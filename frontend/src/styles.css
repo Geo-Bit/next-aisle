@@ -1,11 +1,10 @@
 :root {
-  --background-dark: #0d1117;
-  --text-dark: #c9d1d9;
-  --primary-color: #58a6ff;
-  --accent-color: #f78166;
-  --input-background: #161b22;
-  --item-background: #21262d;
-  --border-color: #30363d;
+  --background-dark: #282a36;
+  --text-dark: #f8f8f2;
+  --primary-color: #ffffff;
+  --accent-color: #ff79c6;
+  --button-bg: #44475a;
+  --button-hover-bg: #6272a4;
 }
 
 body {
@@ -16,9 +15,9 @@ body {
   align-items: center;
   height: 100vh;
   width: 100vw;
+  transition: background 0.3s, color 0.3s;
   background-color: var(--background-dark);
   color: var(--text-dark);
-  transition: background 0.3s, color 0.3s;
 }
 
 .app {
@@ -45,32 +44,43 @@ body {
   border-radius: 5px;
   width: 100%;
   max-width: 400px;
-  font-size: 16px;
-  background-color: var(--input-background);
+  background-color: var(--button-bg);
   color: var(--text-dark);
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--accent-color);
 }
 
 .shopping-lists {
   margin-bottom: 20px;
   display: flex;
-  gap: 10px; /* Add spacing between buttons */
+  gap: 10px;
 }
 
 .shopping-lists button {
   padding: 10px;
   border: 2px solid var(--primary-color);
   border-radius: 5px;
-  background-color: var(--primary-color);
+  background-color: var(--button-bg);
   color: var(--text-dark);
   cursor: pointer;
 }
 
 .shopping-lists button:hover {
+  background-color: var(--button-hover-bg);
+}
+
+.shopping-lists button.selected{
   background-color: var(--accent-color);
 }
 
 .item-list {
   width: 100%;
+  overflow: hidden;
+  max-height: 50vh;
+  overflow-y: auto;
 }
 
 .category-section {
@@ -78,8 +88,9 @@ body {
 }
 
 .category-section h3 {
-  font-size: 1.2em;
-  color: var(--text-dark);
+  margin: 10px 0;
+  font-size: 1em;
+  color: var(--primary-color);
 }
 
 .item-row {
@@ -87,19 +98,20 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  border: 1px solid var(--border-color);
-  margin-bottom: 5px;
+  margin: 5px 0;
+  border: 2px solid var(--primary-color);
   border-radius: 5px;
-  background-color: var(--item-background);
+  background-color: var(--button-bg);
   color: var(--text-dark);
+  cursor: pointer;
 }
 
 .item-row input {
-  width: 100%;
+  background-color: var(--button-bg);
+  color: var(--text-dark);
   border: none;
-  background: transparent;
-  color: inherit;
-  font-size: 16px;
+  padding: 10px;
+  width: 100%;
 }
 
 .item-row input:focus {
@@ -111,27 +123,27 @@ body {
   gap: 10px;
 }
 
-.check-button, .delete-button {
+.check-button, .delete-button, .edit-button {
   background: none;
   border: none;
   cursor: pointer;
   font-size: 1.2em;
-  color: inherit; /* Use inherited color */
+  color: var(--text-dark);
 }
 
-.check-button:focus, .delete-button:focus {
+.check-button:focus, .delete-button:focus, .edit-button:focus {
   outline: none;
 }
 
 .settings-button {
   position: absolute;
   top: 20px;
-  right: 60px;
+  right: 20px;
   font-size: 1.5em;
   cursor: pointer;
   background: none;
   border: none;
-  color: var(--text-dark); /* Ensure the icon is visible */
+  color: var(--text-dark);
 }
 
 .settings-button:focus {
@@ -149,21 +161,20 @@ body {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
   background-color: var(--background-dark);
   color: var(--text-dark);
   padding: 20px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--primary-color);
   width: 80%;
   max-width: 600px;
   border-radius: 5px;
 }
 
-.close,
-.close-modal {
+.close, .close-modal {
   color: var(--text-dark);
   float: right;
   font-size: 28px;
@@ -172,10 +183,7 @@ body {
   border: none;
 }
 
-.close:hover,
-.close:focus,
-.close-modal:hover,
-.close-modal:focus {
+.close:hover, .close:focus, .close-modal:hover, .close-modal:focus {
   color: var(--accent-color);
   text-decoration: none;
   cursor: pointer;
@@ -191,26 +199,52 @@ body {
   padding: 10px;
   border: 2px solid var(--primary-color);
   border-radius: 5px;
-  background-color: var(--primary-color);
+  background-color: var(--button-bg);
   color: var(--text-dark);
   cursor: pointer;
 }
 
 .recommendation-button:hover {
-  background-color: var(--accent-color);
+  background-color: var(--button-hover-bg);
+}
+
+.show-purchased-button {
+  margin-top: 10px;
+  padding: 10px;
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  background-color: var(--button-bg);
+  color: var(--text-dark);
+  cursor: pointer;
+}
+
+.show-purchased-button:hover {
+  background-color: var(--button-hover-bg);
+}
+
+.purchased-item-table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+}
+
+.purchased-item-table th, .purchased-item-table td {
+  padding: 10px;
+  border: 2px solid var(--primary-color);
+  text-align: left;
 }
 
 @media (max-width: 600px) {
   .input-field {
     max-width: 100%;
   }
-  
+
   .item-row {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .item-row span {
-    margin-bottom: 10px;
+  .purchased-item-table th, .purchased-item-table td {
+    padding: 8px;
   }
 }

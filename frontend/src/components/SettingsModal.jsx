@@ -23,19 +23,22 @@ const SettingsModal = ({
             type="number"
             value={recommendationPeriod}
             onChange={handleRecommendationPeriodChange}
+            className="input-field"
           />
         </label>
-        <button
-          className="show-purchased-button"
-          onClick={() => {
-            setShowPurchased(!showPurchased);
-            if (!showPurchased) {
-              fetchPurchasedItems();
-            }
-          }}
-        >
-          {showPurchased ? "Hide Purchased Items" : "Show Purchased Items"}
-        </button>
+        <div>
+          <button
+            className="show-purchased-button"
+            onClick={() => {
+              setShowPurchased(!showPurchased);
+              if (!showPurchased) {
+                fetchPurchasedItems();
+              }
+            }}
+          >
+            {showPurchased ? "Hide Purchased Items" : "Show Purchased Items"}
+          </button>
+        </div>
         {showPurchased && (
           <table className="purchased-item-table">
             <thead>
