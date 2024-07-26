@@ -235,6 +235,7 @@ function App() {
           value={item}
           onChange={(e) => setItem(e.target.value)}
           className="input-field"
+          font-size="16px"
           onKeyPress={(e) => {
             if (e.key === "Enter") {
               handleSubmit(e);
