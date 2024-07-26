@@ -232,7 +232,6 @@ function App() {
       <form onSubmit={handleSubmit} className="input-form">
         <input
           type="text"
-          placeholder="Enter grocery item"
           value={item}
           onChange={(e) => setItem(e.target.value)}
           className="input-field"

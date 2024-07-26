@@ -96,7 +96,7 @@ body {
 
 .category-section h3 {
   margin: 10px 0;
-  font-size: 1em;
+  font-size: 1.4em;
   color: var(--primary-color);
 }
 
@@ -134,7 +134,7 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.2em;
+  font-size: 1.4em;
   color: var(--text-dark);
 }
 
@@ -150,7 +150,7 @@ body {
   position: absolute;
   top: 20px;
   right: 20px;
-  font-size: 1.5em;
+  font-size: 1.4em;
   cursor: pointer;
   background: none;
   border: none;
@@ -246,6 +246,10 @@ body {
 }
 
 @media (max-width: 600px) {
+  #root{
+    
+  }
+
   .input-field {
     max-width: 100%;
   }
