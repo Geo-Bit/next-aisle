@@ -258,17 +258,15 @@ function App() {
         {Object.keys(categorizedItems).map((category) => (
           <div key={category} className="category-section">
             <h3>{category}</h3>
-            <div class="items-box">
-              {categorizedItems[category].map((item) => (
-                <ItemRow
-                  key={item.id}
-                  item={item}
-                  onCheck={handleCheckItem}
-                  onDelete={handleDeleteItem}
-                  onEdit={handleEditItem}
-                />
-              ))}
-            </div>
+            {categorizedItems[category].map((item) => (
+              <ItemRow
+                key={item.id}
+                item={item}
+                onCheck={handleCheckItem}
+                onDelete={handleDeleteItem}
+                onEdit={handleEditItem}
+              />
+            ))}
           </div>
         ))}
       </div>
