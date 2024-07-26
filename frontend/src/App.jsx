@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCheck,
-  faTrashAlt,
-  faEdit,
-  faCog,
-} from "@fortawesome/free-solid-svg-icons";
-import DarkModeToggle from "./components/DarkModeToggle";
+import { faCheck, faTrashAlt, faCog } from "@fortawesome/free-solid-svg-icons";
 import "./styles.css";
 
 function App() {
@@ -15,7 +9,6 @@ function App() {
   const [items, setItems] = useState([]);
   const [purchasedItems, setPurchasedItems] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
-  const [darkMode, setDarkMode] = useState(true); // Default to dark mode
   const [showPurchased, setShowPurchased] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [editedItemName, setEditedItemName] = useState("");
@@ -38,10 +31,6 @@ function App() {
       fetchRecommendations();
     }
   }, [selectedList]);
-
-  useEffect(() => {
-    document.body.className = darkMode ? "dark-mode" : "light-mode";
-  }, [darkMode]);
 
   const fetchShoppingLists = async () => {
     try {
@@ -111,10 +100,6 @@ function App() {
     }
   };
 
-  const handleToggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
-
   const handleCheckItem = async (id) => {
     try {
       await axios.post(`${API_BASE_URL}/api/items/${id}/check`);
@@ -138,27 +123,17 @@ function App() {
     setEditedItemName(item.name);
   };
 
-  const handleUpdateItem = async (e) => {
-    e.preventDefault();
+  const handleUpdateItem = async (id, newName) => {
     try {
-      const response = await axios.put(
-        `${API_BASE_URL}/api/items/${editingItem.id}`,
-        {
-          name: editedItemName,
-        }
-      );
+      const response = await axios.put(`${API_BASE_URL}/api/items/${id}`, {
+        name: newName,
+      });
       console.log("Item updated:", response.data);
       setEditingItem(null);
-      setEditedItemName("");
       fetchItems(); // Refresh the item list
     } catch (error) {
       console.error("Error updating item:", error);
     }
-  };
-
-  const handleCancelEdit = () => {
-    setEditingItem(null);
-    setEditedItemName("");
   };
 
   const handleCreateShoppingList = async () => {
@@ -212,15 +187,26 @@ function App() {
     fetchRecommendations();
   };
 
+  const handleItemNameChange = (e) => {
+    setEditedItemName(e.target.value);
+  };
+
+  const groupedItems = items.reduce((acc, item) => {
+    if (!acc[item.category]) {
+      acc[item.category] = [];
+    }
+    acc[item.category].push(item);
+    return acc;
+  }, {});
+
   return (
     <div className="app">
-      <DarkModeToggle darkMode={darkMode} onToggle={handleToggleDarkMode} />
       <button className="settings-button" onClick={handleSettingsToggle}>
         <FontAwesomeIcon icon={faCog} />
       </button>
       {showSettings && (
         <div className="modal">
-          <div className={`modal-content ${darkMode ? "dark-mode" : ""}`}>
+          <div className="modal-content">
             <button className="close-modal" onClick={handleSettingsToggle}>
               ✖
             </button>
@@ -269,7 +255,7 @@ function App() {
       )}
       {showModal && (
         <div className="modal">
-          <div className={`modal-content ${darkMode ? "dark-mode" : ""}`}>
+          <div className="modal-content">
             <button className="close-modal" onClick={() => setShowModal(false)}>
               ✖
             </button>
@@ -317,58 +303,53 @@ function App() {
           </button>
         ))}
       </div>
-      {editingItem && (
-        <form onSubmit={handleUpdateItem} className="input-form">
-          <input
-            type="text"
-            placeholder="Edit grocery item"
-            value={editedItemName}
-            onChange={(e) => setEditedItemName(e.target.value)}
-            className="input-field"
-          />
-          <button type="submit">Update</button>
-          <button type="button" onClick={handleCancelEdit}>
-            Cancel
-          </button>
-        </form>
-      )}
-      <table className="item-table">
-        <thead>
-          <tr>
-            <th>Shopping Item</th>
-            <th>Aisle</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item) => (
-            <tr key={item.id}>
-              <td>{item.name}</td>
-              <td>{item.category}</td>
-              <td>
-                <button
-                  className="check-button"
-                  onClick={() => handleCheckItem(item.id)}
-                >
-                  <FontAwesomeIcon icon={faCheck} />
-                </button>
-                <button
-                  className="delete-button"
-                  onClick={() => handleDeleteItem(item.id)}
-                >
-                  <FontAwesomeIcon icon={faTrashAlt} />
-                </button>
-                <button
-                  className="edit-button"
-                  onClick={() => handleEditItem(item)}
-                >
-                  <FontAwesomeIcon icon={faEdit} />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="item-list">
+        {Object.keys(groupedItems).map((category) => (
+          <div key={category} className="category-section">
+            <h3>{category}</h3>
+            {groupedItems[category].map((item) => (
+              <div
+                key={item.id}
+                className="item-row"
+                onClick={() => handleEditItem(item)}
+              >
+                {editingItem && editingItem.id === item.id ? (
+                  <input
+                    type="text"
+                    value={editedItemName}
+                    onChange={handleItemNameChange}
+                    onBlur={() => handleUpdateItem(item.id, editedItemName)}
+                  />
+                ) : (
+                  <>
+                    <span>{item.name}</span>
+                    <div className="item-buttons">
+                      <button
+                        className="check-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCheckItem(item.id);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faCheck} />
+                      </button>
+                      <button
+                        className="delete-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteItem(item.id);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTrashAlt} />
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
       <div className="recommendations">
         <h3>Recommendations</h3>
         <div className="recommendation-buttons">

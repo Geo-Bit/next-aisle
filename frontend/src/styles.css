@@ -1,10 +1,11 @@
 :root {
-  --background-light: #ffffff;
-  --background-dark: #282a36;
-  --text-light: #000000;
-  --text-dark: #f8f8f2;
-  --primary-color: #6272a4;
-  --accent-color: #ff79c6;
+  --background-dark: #0d1117;
+  --text-dark: #c9d1d9;
+  --primary-color: #58a6ff;
+  --accent-color: #f78166;
+  --input-background: #161b22;
+  --item-background: #21262d;
+  --border-color: #30363d;
 }
 
 body {
@@ -15,17 +16,9 @@ body {
   align-items: center;
   height: 100vh;
   width: 100vw;
-  transition: background 0.3s, color 0.3s;
-}
-
-body.light-mode {
-  background-color: var(--background-light);
-  color: var(--text-light);
-}
-
-body.dark-mode {
   background-color: var(--background-dark);
   color: var(--text-dark);
+  transition: background 0.3s, color 0.3s;
 }
 
 .app {
@@ -52,57 +45,9 @@ body.dark-mode {
   border-radius: 5px;
   width: 100%;
   max-width: 400px;
-}
-
-.dark-mode-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--primary-color);
-  transition: .4s;
-  border-radius: 34px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: var(--accent-color);
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
+  font-size: 16px;
+  background-color: var(--input-background);
+  color: var(--text-dark);
 }
 
 .shopping-lists {
@@ -116,7 +61,7 @@ input:checked + .slider:before {
   border: 2px solid var(--primary-color);
   border-radius: 5px;
   background-color: var(--primary-color);
-  color: var(--text-light);
+  color: var(--text-dark);
   cursor: pointer;
 }
 
@@ -124,51 +69,57 @@ input:checked + .slider:before {
   background-color: var(--accent-color);
 }
 
-.item-table, .purchased-item-table {
-  margin-top: 20px;
-  border-collapse: collapse;
+.item-list {
   width: 100%;
-  table-layout: fixed;  /* Ensure all text fits on a single line */
 }
 
-.item-table th, .item-table td, .purchased-item-table th, .purchased-item-table td {
-  padding: 12px;
-  border: 1px solid var(--primary-color);
-  text-align: left;
-  white-space: nowrap;  /* Ensure all text fits on a single line */
-  overflow: hidden;     /* Prevent text overflow */
-  text-overflow: ellipsis; /* Add ellipsis if text overflows */
+.category-section {
+  margin-bottom: 20px;
 }
 
-.item-table th, .purchased-item-table th {
-  background-color: var(--primary-color);
-  color: var(--text-light);
-}
-
-.item-table td, .purchased-item-table td {
-  background-color: var(--background-light);
-  color: var(--text-light);
-}
-
-.dark-mode .item-table th, .dark-mode .purchased-item-table th {
-  background-color: var(--accent-color);
+.category-section h3 {
+  font-size: 1.2em;
   color: var(--text-dark);
 }
 
-.dark-mode .item-table td, .dark-mode .purchased-item-table td {
-  background-color: var(--background-dark);
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 5px;
+  border-radius: 5px;
+  background-color: var(--item-background);
   color: var(--text-dark);
 }
 
-.check-button, .delete-button, .edit-button {
+.item-row input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 16px;
+}
+
+.item-row input:focus {
+  outline: none;
+}
+
+.item-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.check-button, .delete-button {
   background: none;
   border: none;
   cursor: pointer;
   font-size: 1.2em;
-  color: white; /* Ensure icons are white */
+  color: inherit; /* Use inherited color */
 }
 
-.check-button:focus, .delete-button:focus, .edit-button:focus {
+.check-button:focus, .delete-button:focus {
   outline: none;
 }
 
@@ -180,7 +131,7 @@ input:checked + .slider:before {
   cursor: pointer;
   background: none;
   border: none;
-  color: var(--text-light); /* Ensure the icon is white */
+  color: var(--text-dark); /* Ensure the icon is visible */
 }
 
 .settings-button:focus {
@@ -202,23 +153,18 @@ input:checked + .slider:before {
 }
 
 .modal-content {
-  background-color: var(--background-light);
-  color: var(--text-light);
+  background-color: var(--background-dark);
+  color: var(--text-dark);
   padding: 20px;
-  border: 1px solid var(--primary-color);
+  border: 1px solid var(--border-color);
   width: 80%;
   max-width: 600px;
   border-radius: 5px;
 }
 
-.modal-content.dark-mode {
-  background-color: var(--background-dark);
-  color: var(--text-dark);
-}
-
 .close,
 .close-modal {
-  color: var(--text-light);
+  color: var(--text-dark);
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -246,7 +192,7 @@ input:checked + .slider:before {
   border: 2px solid var(--primary-color);
   border-radius: 5px;
   background-color: var(--primary-color);
-  color: var(--text-light);
+  color: var(--text-dark);
   cursor: pointer;
 }
 
@@ -259,7 +205,12 @@ input:checked + .slider:before {
     max-width: 100%;
   }
   
-  .item-table th, .item-table td, .purchased-item-table th, .purchased-item-table td {
-    padding: 8px;
+  .item-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .item-row span {
+    margin-bottom: 10px;
   }
 }
