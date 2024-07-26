@@ -190,6 +190,7 @@ function App() {
 
   return (
     <div className="app">
+      <h1>Next Aisle</h1>
       <button className="settings-button" onClick={handleSettingsToggle}>
         <FontAwesomeIcon icon={faCog} />
       </button>

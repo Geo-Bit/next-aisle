@@ -33,16 +33,18 @@ const ItemRow = ({ item, onCheck, onDelete, onEdit }) => {
           autoFocus
         />
       ) : (
-        <span onClick={handleEdit}>{item.name}</span>
+        <>
+          <div onClick={handleEdit}>{item.name}</div>
+          <div className="item-buttons">
+            <button className="check-button" onClick={() => onCheck(item.id)}>
+              <FontAwesomeIcon icon={faCheck} />
+            </button>
+            <button className="delete-button" onClick={() => onDelete(item.id)}>
+              <FontAwesomeIcon icon={faTrashAlt} />
+            </button>
+          </div>
+        </>
       )}
-      <div className="item-buttons">
-        <button className="check-button" onClick={() => onCheck(item.id)}>
-          <FontAwesomeIcon icon={faCheck} />
-        </button>
-        <button className="delete-button" onClick={() => onDelete(item.id)}>
-          <FontAwesomeIcon icon={faTrashAlt} />
-        </button>
-      </div>
     </div>
   );
 };

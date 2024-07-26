@@ -55,8 +55,9 @@ body {
 
 .shopping-lists {
   margin-bottom: 20px;
-  display: flex;
+  display: grid;
   gap: 10px;
+  Grid-template: auto 1fr / auto 1fr auto;
 }
 
 .shopping-lists button {
@@ -66,6 +67,7 @@ body {
   background-color: var(--button-bg);
   color: var(--text-dark);
   cursor: pointer;
+  white-space:nowrap;
 }
 
 .shopping-lists button:hover {
