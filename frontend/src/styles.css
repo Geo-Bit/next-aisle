@@ -7,6 +7,10 @@
   --button-hover-bg: #6272a4;
 }
 
+#root{
+  width:1200px;
+}
+
 body {
   margin: 0;
   font-family: 'Arial', sans-serif;
