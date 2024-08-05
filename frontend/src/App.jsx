@@ -19,7 +19,7 @@ function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [recommendationPeriod, setRecommendationPeriod] = useState(14); // Default to two weeks
   const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || "http://10.0.1.162:4000";
+    import.meta.env.VITE_API_BASE_URL || "https://10.0.1.162:4000";
 
   useEffect(() => {
     fetchShoppingLists();

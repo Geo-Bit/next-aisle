@@ -11,7 +11,7 @@ function InputField() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/items");
+      const response = await axios.get("https://localhost:4000/api/items");
       const sortedItems = response.data.sort((a, b) =>
         a.category.localeCompare(b.category)
       );
@@ -24,7 +24,7 @@ function InputField() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4000/api/items", {
+      const response = await axios.post("https://localhost:4000/api/items", {
         name: item,
       });
       console.log("Item added:", response.data);
