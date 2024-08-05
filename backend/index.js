@@ -11,6 +11,7 @@ app.use((req, res, next) => {
   next();
 });
 
+/*
 app.use(
   cors({
     origin: process.env.FRONTEND_URL, // Ensure this matches your frontend's URL
@@ -18,7 +19,7 @@ app.use(
     allowedHeaders: ["Content-Type"],
   })
 );
-
+*/
 app.use(express.json());
 
 // Database connection
