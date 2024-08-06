@@ -15,7 +15,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL, // Ensure this matches your frontend's URL
+    origin: [process.env.FRONTEND_URL, process.env.PROXY_URL], // Ensure this matches your frontend's URL
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: ["Content-Type"],
   })
