@@ -7,13 +7,15 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 app.use((req, res, next) => {
+  const remoteAddress = req.ip || req.connection.remoteAddress;
   console.log("Received request:", req.method, req.url);
+  console.log(`Incoming request from: ${remoteAddress}`);
   next();
 });
 
 app.use(
   cors({
-    //origin: process.env.FRONTEND_URL, // Ensure this matches your frontend's URL
+    origin: process.env.FRONTEND_URL, // Ensure this matches your frontend's URL
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: ["Content-Type"],
   })
