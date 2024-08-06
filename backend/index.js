@@ -8,6 +8,9 @@ const port = process.env.PORT || 4000;
 
 app.use((req, res, next) => {
   const remoteAddress = req.ip || req.connection.remoteAddress;
+  res.header("Access-Control-Allow-Origin", "*"); // Allow all origins
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   console.log("Received request:", req.method, req.url);
   console.log(`Incoming request from: ${remoteAddress}`);
   next();
@@ -17,6 +20,7 @@ app.use(
   cors({
     origin: [process.env.FRONTEND_URL, process.env.PROXY_URL], // Ensure this matches your frontend's URL
     methods: ["GET", "POST", "DELETE", "PUT"],
+
     allowedHeaders: ["Content-Type"],
   })
 );
