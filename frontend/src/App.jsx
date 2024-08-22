@@ -34,7 +34,7 @@ function App() {
 
   const fetchShoppingLists = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/shopping-lists`);
+      const response = await axios.get(`${API_BASE_URL}shopping-lists`);
       setShoppingLists(response.data);
       if (response.data.length > 0) {
         setSelectedList(response.data[0].id);
@@ -47,7 +47,7 @@ function App() {
   const fetchItems = async () => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/api/shopping-lists/${selectedList}/items`
+        `${API_BASE_URL}shopping-lists/${selectedList}/items`
       );
       const sortedItems = response.data.sort((a, b) =>
         a.category.localeCompare(b.category)
@@ -60,7 +60,7 @@ function App() {
 
   const fetchPurchasedItems = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/purchased-items`);
+      const response = await axios.get(`${API_BASE_URL}purchased-items`);
       setPurchasedItems(response.data);
     } catch (error) {
       console.error("Error fetching purchased items:", error);
@@ -70,7 +70,7 @@ function App() {
   const fetchRecommendations = async () => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/api/recommendations?period=${recommendationPeriod}`
+        `${API_BASE_URL}recommendations?period=${recommendationPeriod}`
       );
       setRecommendations(response.data);
     } catch (error) {
@@ -87,7 +87,7 @@ function App() {
 
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/api/shopping-lists/${selectedList}/items`,
+        `${API_BASE_URL}shopping-lists/${selectedList}/items`,
         {
           name: item,
         }
@@ -102,7 +102,7 @@ function App() {
 
   const handleCheckItem = async (id) => {
     try {
-      await axios.post(`${API_BASE_URL}/api/items/${id}/check`);
+      await axios.post(`${API_BASE_URL}items/${id}/check`);
       fetchItems();
     } catch (error) {
       console.error("Error checking item:", error);
@@ -111,7 +111,7 @@ function App() {
 
   const handleDeleteItem = async (id) => {
     try {
-      await axios.delete(`${API_BASE_URL}/api/items/${id}`);
+      await axios.delete(`${API_BASE_URL}items/${id}`);
       fetchItems();
     } catch (error) {
       console.error("Error deleting item:", error);
@@ -120,7 +120,7 @@ function App() {
 
   const handleEditItem = async (id, name) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/api/items/${id}`, {
+      const response = await axios.put(`${API_BASE_URL}items/${id}`, {
         name,
       });
       console.log("Item updated:", response.data);
@@ -138,10 +138,9 @@ function App() {
     e.preventDefault();
     if (newListName) {
       try {
-        const response = await axios.post(
-          `${API_BASE_URL}/api/shopping-lists`,
-          { name: newListName }
-        );
+        const response = await axios.post(`${API_BASE_URL}shopping-lists`, {
+          name: newListName,
+        });
         setShoppingLists([...shoppingLists, response.data]);
         setSelectedList(response.data.id);
         setNewListName("");
@@ -160,7 +159,7 @@ function App() {
 
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/api/shopping-lists/${selectedList}/items`,
+        `${API_BASE_URL}shopping-lists/${selectedList}/items`,
         {
           name: itemName,
         }
