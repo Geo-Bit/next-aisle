@@ -16,6 +16,17 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use((req, res, next) => {
+  const userEmail = req.headers["cf-access-authenticated-user-email"];
+  if (userEmail) {
+    req.userEmail = userEmail;
+    console.log(`Authenticated user: ${userEmail}`);
+  } else {
+    console.log("No authenticated user");
+  }
+  next();
+});
+
 app.use(
   cors({
     origin: [
