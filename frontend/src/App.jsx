@@ -87,7 +87,7 @@ function App() {
 
     try {
       const response = await axios.post(
-        `${API_BASE_URL}shopping-lists/${selectedList}/items`,
+        `${API_BASE_URL}/shopping-lists/${selectedList}/items`,
         {
           name: item,
         }
