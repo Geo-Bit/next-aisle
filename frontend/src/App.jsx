@@ -17,6 +17,7 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [newListName, setNewListName] = useState("");
   const [showSettings, setShowSettings] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
   const [recommendationPeriod, setRecommendationPeriod] = useState(14); // Default to two weeks
   const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL || "https://10.0.1.162:4000";
@@ -35,7 +36,8 @@ function App() {
   const fetchShoppingLists = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/shopping-lists`);
-      setShoppingLists(response.data);
+      setUserEmail(response.data.userEmail);
+      setShoppingLists(response.data.lists);
       if (response.data.length > 0) {
         setSelectedList(response.data[0].id);
       }
@@ -195,6 +197,7 @@ function App() {
       </button>
       <SettingsModal
         showSettings={showSettings}
+        userEmail={userEmail}
         handleSettingsToggle={handleSettingsToggle}
         recommendationPeriod={recommendationPeriod}
         handleRecommendationPeriodChange={handleRecommendationPeriodChange}

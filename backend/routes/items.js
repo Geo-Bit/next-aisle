@@ -25,7 +25,8 @@ router.post("/api/shopping-lists", async (req, res) => {
 router.get("/api/shopping-lists", async (req, res) => {
   try {
     const lists = await ShoppingList.findAll();
-    res.json(lists);
+    const userEmail = req.userEmail || "Guest";
+    res.json({ lists, userEmail });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch shopping lists" });

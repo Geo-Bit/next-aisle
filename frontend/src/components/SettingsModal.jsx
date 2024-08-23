@@ -9,6 +9,7 @@ const SettingsModal = ({
   setShowPurchased,
   fetchPurchasedItems,
   purchasedItems,
+  userEmail,
 }) =>
   showSettings && (
     <div className="modal">
@@ -17,6 +18,7 @@ const SettingsModal = ({
           ✖
         </button>
         <h2>Settings</h2>
+        <p>User: {userEmail}</p>
         <label>
           Recommendation Period (days):
           <input

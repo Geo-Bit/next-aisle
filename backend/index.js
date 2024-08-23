@@ -7,16 +7,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 app.use((req, res, next) => {
-  const remoteAddress = req.ip || req.connection.remoteAddress;
-  res.header("Access-Control-Allow-Origin", "*"); // Allow all origins
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  console.log("Received request:", req.method, req.url);
-  console.log(`Incoming request from: ${remoteAddress}`);
-  next();
-});
-
-app.use((req, res, next) => {
+  console.log(`Authenticated user:`);
   const userEmail = req.headers["cf-access-authenticated-user-email"];
   if (userEmail) {
     req.userEmail = userEmail;
@@ -24,6 +15,16 @@ app.use((req, res, next) => {
   } else {
     console.log("No authenticated user");
   }
+  next();
+});
+
+app.use((req, res, next) => {
+  const remoteAddress = req.ip || req.connection.remoteAddress;
+  res.header("Access-Control-Allow-Origin", "*"); // Allow all origins
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  console.log("Received request, yo:", req.method, req.url);
+  console.log(`Incoming request from: ${remoteAddress}`);
   next();
 });
 
