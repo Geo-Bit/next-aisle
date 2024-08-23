@@ -5,30 +5,49 @@ const sequelize = require("../config/database");
 const ShoppingList = require("../models/ShoppingList");
 const ShoppingListItem = require("../models/ShoppingListItem");
 const PurchasedItem = require("../models/PurchasedItem");
+const User = require("../models/User");
 
 const router = express.Router();
 
 const customExclusions = ["sm", "lg"];
 
 router.post("/api/shopping-lists", async (req, res) => {
-  const { name } = req.body;
-
   try {
-    const list = await ShoppingList.create({ name });
-    res.json(list);
+    const { name } = req.body;
+    const userEmail = req.userEmail;
+
+    // Find or create the user
+    let user = await User.findOne({ where: { email: userEmail } });
+    if (!user) {
+      user = await User.create({ email: userEmail });
+    }
+
+    // Create a new shopping list for the user
+    const list = await ShoppingList.create({ name, UserId: user.id });
+
+    res.status(201).json(list);
   } catch (error) {
-    console.error(error);
+    console.error("Error creating shopping list:", error);
     res.status(500).json({ error: "Failed to create shopping list" });
   }
 });
 
 router.get("/api/shopping-lists", async (req, res) => {
   try {
-    const lists = await ShoppingList.findAll();
-    const userEmail = req.userEmail || "Guest";
-    res.json({ lists, userEmail });
+    const userEmail = req.userEmail;
+
+    // Find or create the user
+    let user = await User.findOne({ where: { email: userEmail } });
+    if (!user) {
+      user = await User.create({ email: userEmail });
+    }
+
+    // Fetch the user's shopping lists
+    const lists = await ShoppingList.findAll({ where: { UserId: user.id } });
+
+    res.json({ userEmail, lists });
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching shopping lists:", error);
     res.status(500).json({ error: "Failed to fetch shopping lists" });
   }
 });

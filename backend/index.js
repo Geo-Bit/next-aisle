@@ -7,13 +7,17 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 app.use((req, res, next) => {
-  console.log(`Authenticated user:`);
-  const userEmail = req.headers["cf-access-authenticated-user-email"];
+  let userEmail;
+  if (process.env.ENVIRONMENT == "DEV") {
+    userEmail = process.env.TEST_EMAIL;
+  } else {
+    userEmail = req.headers["cf-access-authenticated-user-email"];
+  }
   if (userEmail) {
     req.userEmail = userEmail;
     console.log(`Authenticated user: ${userEmail}`);
   } else {
-    console.log("No authenticated user");
+    res.status(403).send("Forbidden");
   }
   next();
 });
@@ -50,7 +54,10 @@ sequelize
   .catch((err) => console.log("Error: " + err));
 
 // Sync the database
-sequelize.sync();
+sequelize
+  .sync({ alter: true }) // Using alter to update the existing schema without dropping tables
+  .then(() => console.log("Database synced..."))
+  .catch((err) => console.log("Error syncing database: " + err));
 
 // Routes
 const itemsRouter = require("./routes/items");
