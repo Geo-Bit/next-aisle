@@ -9,18 +9,11 @@ export default defineConfig({
     port: 8081,
     strictPort: true,
     proxy: {
-      // Proxy API requests to the backend server
       "/api": {
-        target: process.env.REACT_APP_API_BASE_URL || "https://localhost:4000",
+        target: process.env.BACKEND_URL || "http://backend:4000",
         changeOrigin: true,
         secure: false,
       },
-    },
-  },
-  define: {
-    "process.env": {
-      REACT_APP_API_BASE_URL:
-        process.env.REACT_APP_API_BASE_URL || "https://localhost:4000",
     },
   },
   build: {

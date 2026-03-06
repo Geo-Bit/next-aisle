@@ -19,8 +19,7 @@ function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [recommendationPeriod, setRecommendationPeriod] = useState(14); // Default to two weeks
-  const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || "https://10.0.1.162:4000";
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
 
   useEffect(() => {
     fetchShoppingLists();
@@ -38,8 +37,8 @@ function App() {
       const response = await axios.get(`${API_BASE_URL}/shopping-lists`);
       setUserEmail(response.data.userEmail);
       setShoppingLists(response.data.lists);
-      if (response.data.length > 0) {
-        setSelectedList(response.data[0].id);
+      if (response.data.lists.length > 0) {
+        setSelectedList(response.data.lists[0].id);
       }
     } catch (error) {
       console.error("Error fetching shopping lists:", error);
@@ -237,7 +236,7 @@ function App() {
           value={item}
           onChange={(e) => setItem(e.target.value)}
           className="input-field"
-          font-size="16px"
+          style={{ fontSize: "16px" }}
           onKeyPress={(e) => {
             if (e.key === "Enter") {
               handleSubmit(e);

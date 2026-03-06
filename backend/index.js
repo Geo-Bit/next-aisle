@@ -16,10 +16,10 @@ app.use((req, res, next) => {
   if (userEmail) {
     req.userEmail = userEmail;
     console.log(`Authenticated user: ${userEmail}`);
+    next();
   } else {
     res.status(403).send("Forbidden");
   }
-  next();
 });
 
 app.use((req, res, next) => {
