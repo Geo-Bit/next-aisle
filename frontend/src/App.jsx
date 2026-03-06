@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog, faPen, faTrashAlt, faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
+import { faCog, faPen, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import SettingsModal from "./components/SettingsModal";
 import ItemRow from "./components/ItemRow";
 import "./styles.css";
@@ -22,20 +22,11 @@ function App() {
   const [editingListName, setEditingListName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [recommendationPeriod, setRecommendationPeriod] = useState(14); // Default to two weeks
-  const [darkMode, setDarkMode] = useState(() => {
-    const saved = localStorage.getItem("darkMode");
-    return saved !== null ? JSON.parse(saved) : true;
-  });
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
 
   useEffect(() => {
     fetchShoppingLists();
   }, []);
-
-  useEffect(() => {
-    document.body.classList.toggle("light-mode", !darkMode);
-    localStorage.setItem("darkMode", JSON.stringify(darkMode));
-  }, [darkMode]);
 
   useEffect(() => {
     if (selectedList) {
@@ -233,9 +224,6 @@ function App() {
       <h1>Next Aisle</h1>
       <button className="settings-button" onClick={handleSettingsToggle}>
         <FontAwesomeIcon icon={faCog} />
-      </button>
-      <button className="theme-button" onClick={() => setDarkMode(!darkMode)}>
-        <FontAwesomeIcon icon={darkMode ? faSun : faMoon} />
       </button>
       <SettingsModal
         showSettings={showSettings}
