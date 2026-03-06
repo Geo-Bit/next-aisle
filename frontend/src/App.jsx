@@ -273,7 +273,7 @@ function App() {
         ))}
       </div>
       <div className="recommendations">
-        <h3>Recommendations</h3>
+        <h3>Recommendations v1.1</h3>
         <div className="recommendation-buttons">
           {recommendations.map((item, index) => (
             <button
