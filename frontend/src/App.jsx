@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog, faPen, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCog, faPen, faTrashAlt, faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 import SettingsModal from "./components/SettingsModal";
 import ItemRow from "./components/ItemRow";
-import DarkModeToggle from "./components/DarkModeToggle";
 import "./styles.css";
 
 function App() {
@@ -235,7 +234,9 @@ function App() {
       <button className="settings-button" onClick={handleSettingsToggle}>
         <FontAwesomeIcon icon={faCog} />
       </button>
-      <DarkModeToggle darkMode={darkMode} onToggle={() => setDarkMode(!darkMode)} />
+      <button className="theme-button" onClick={() => setDarkMode(!darkMode)}>
+        <FontAwesomeIcon icon={darkMode ? faSun : faMoon} />
+      </button>
       <SettingsModal
         showSettings={showSettings}
         userEmail={userEmail}

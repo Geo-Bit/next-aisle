@@ -189,72 +189,30 @@ body {
   outline: none;
 }
 
-.settings-button {
+.settings-button, .theme-button {
   position: absolute;
   top: 20px;
-  right: 20px;
   font-size: 1.4em;
   cursor: pointer;
   background: none;
   border: none;
   color: var(--text-dark);
+  opacity: 0.8;
 }
 
-.dark-mode-toggle {
-  position: absolute;
-  top: 24px;
-  left: 20px;
+.settings-button {
+  right: 20px;
 }
 
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 46px;
-  height: 24px;
+.theme-button {
+  right: 56px;
 }
 
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+.settings-button:hover, .theme-button:hover {
+  opacity: 1;
 }
 
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: var(--button-bg);
-  transition: 0.3s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: var(--text-dark);
-  transition: 0.3s;
-}
-
-input:checked + .slider {
-  background-color: var(--button-hover-bg);
-}
-
-input:checked + .slider:before {
-  transform: translateX(22px);
-}
-
-.slider.round {
-  border-radius: 24px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
-.settings-button:focus {
+.settings-button:focus, .theme-button:focus {
   outline: none;
 }
 
