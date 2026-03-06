@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog } from "@fortawesome/free-solid-svg-icons";
+import { faCog, faPen, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import SettingsModal from "./components/SettingsModal";
 import ItemRow from "./components/ItemRow";
 import DarkModeToggle from "./components/DarkModeToggle";
@@ -18,6 +18,9 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [newListName, setNewListName] = useState("");
   const [showSettings, setShowSettings] = useState(false);
+  const [showManageLists, setShowManageLists] = useState(false);
+  const [editingListId, setEditingListId] = useState(null);
+  const [editingListName, setEditingListName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [recommendationPeriod, setRecommendationPeriod] = useState(14); // Default to two weeks
   const [darkMode, setDarkMode] = useState(() => {
@@ -139,15 +142,6 @@ function App() {
     }
   };
 
-  const handleEditCategory = async (id, category) => {
-    try {
-      await axios.put(`${API_BASE_URL}/items/${id}`, { category });
-      fetchItems();
-    } catch (error) {
-      console.error("Error updating category:", error);
-    }
-  };
-
   const handleDeleteList = async (listId) => {
     try {
       await axios.delete(`${API_BASE_URL}/shopping-lists/${listId}`);
@@ -156,8 +150,25 @@ function App() {
       if (selectedList === listId) {
         setSelectedList(updatedLists.length > 0 ? updatedLists[0].id : null);
       }
+      if (editingListId === listId) setEditingListId(null);
     } catch (error) {
       console.error("Error deleting shopping list:", error);
+    }
+  };
+
+  const handleRenameList = async (listId) => {
+    if (!editingListName.trim()) {
+      setEditingListId(null);
+      return;
+    }
+    try {
+      const response = await axios.put(`${API_BASE_URL}/shopping-lists/${listId}`, {
+        name: editingListName,
+      });
+      setShoppingLists(shoppingLists.map((l) => (l.id === listId ? response.data : l)));
+      setEditingListId(null);
+    } catch (error) {
+      console.error("Error renaming shopping list:", error);
     }
   };
 
@@ -277,25 +288,57 @@ function App() {
       </form>
       <div className="shopping-lists">
         <button onClick={handleCreateShoppingList}>+</button>
+        <button className="manage-lists-btn" onClick={() => setShowManageLists(true)}>
+          <FontAwesomeIcon icon={faPen} />
+        </button>
         {shoppingLists.map((list) => (
           <button
             key={list.id}
-            className={`list-tab ${selectedList === list.id ? "selected" : ""}`}
+            className={selectedList === list.id ? "selected" : ""}
             onClick={() => setSelectedList(list.id)}
           >
             {list.name}
-            <span
-              className="delete-list-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDeleteList(list.id);
-              }}
-            >
-              ×
-            </span>
           </button>
         ))}
       </div>
+      {showManageLists && (
+        <div className="modal">
+          <div className="modal-content">
+            <button className="close-modal" onClick={() => { setShowManageLists(false); setEditingListId(null); }}>
+              ✖
+            </button>
+            <h2>Manage Lists</h2>
+            {shoppingLists.map((list) => (
+              <div key={list.id} className="manage-list-row">
+                {editingListId === list.id ? (
+                  <input
+                    className="input-field manage-list-input"
+                    type="text"
+                    value={editingListName}
+                    onChange={(e) => setEditingListName(e.target.value)}
+                    onBlur={() => handleRenameList(list.id)}
+                    onKeyPress={(e) => e.key === "Enter" && handleRenameList(list.id)}
+                    autoFocus
+                  />
+                ) : (
+                  <span
+                    className="manage-list-name"
+                    onClick={() => { setEditingListId(list.id); setEditingListName(list.name); }}
+                  >
+                    {list.name}
+                  </span>
+                )}
+                <button
+                  className="delete-button"
+                  onClick={() => handleDeleteList(list.id)}
+                >
+                  <FontAwesomeIcon icon={faTrashAlt} />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       <div className="item-list">
         {Object.keys(categorizedItems).map((category) => (
           <div key={category} className="category-section">
@@ -307,7 +350,6 @@ function App() {
                 onCheck={handleCheckItem}
                 onDelete={handleDeleteItem}
                 onEdit={handleEditItem}
-                onEditCategory={handleEditCategory}
               />
             ))}
           </div>

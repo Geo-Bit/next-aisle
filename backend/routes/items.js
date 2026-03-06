@@ -93,6 +93,19 @@ router.post("/api/shopping-lists/:listId/items", async (req, res) => {
   }
 });
 
+router.put("/api/shopping-lists/:listId", async (req, res) => {
+  const { listId } = req.params;
+  const { name } = req.body;
+  try {
+    await ShoppingList.update({ name }, { where: { id: listId } });
+    const updated = await ShoppingList.findByPk(listId);
+    res.json(updated);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to rename shopping list" });
+  }
+});
+
 router.delete("/api/shopping-lists/:listId", async (req, res) => {
   const { listId } = req.params;
   try {
