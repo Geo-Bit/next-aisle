@@ -93,6 +93,18 @@ router.post("/api/shopping-lists/:listId/items", async (req, res) => {
   }
 });
 
+router.delete("/api/shopping-lists/:listId", async (req, res) => {
+  const { listId } = req.params;
+  try {
+    await ShoppingListItem.destroy({ where: { shoppingListId: listId } });
+    await ShoppingList.destroy({ where: { id: listId } });
+    res.status(204).end();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to delete shopping list" });
+  }
+});
+
 router.get("/api/shopping-lists/:listId/items", async (req, res) => {
   const { listId } = req.params;
   console.log("Fetching items for shopping list ID:", listId); // Debugging line
@@ -122,10 +134,12 @@ router.post("/api/items/:id/check", async (req, res) => {
   try {
     const item = await ShoppingListItem.findByPk(req.params.id);
     if (item) {
+      const user = await User.findOne({ where: { email: req.userEmail } });
       await PurchasedItem.create({
         name: item.name,
         category: item.category,
         purchasedAt: new Date(),
+        UserId: user ? user.id : null,
       });
       await item.destroy();
       res.status(200).end();
@@ -139,40 +153,36 @@ router.post("/api/items/:id/check", async (req, res) => {
 });
 
 router.put("/api/items/:id", async (req, res) => {
-  const { name } = req.body;
+  const { name, category } = req.body;
 
   try {
-    let strippedDescription = name.replace(/[^a-zA-Z ]+/g, "");
-    strippedDescription = strippedDescription.toLowerCase();
-    customExclusions.forEach((excl) => {
-      const regex = new RegExp(`^${excl} `, "g");
-      strippedDescription = strippedDescription.replace(regex, "");
-    });
+    const item = await ShoppingListItem.findByPk(req.params.id);
+    if (!item) return res.status(404).json({ error: "Item not found" });
 
-    const response = await axios.get(
-      `https://api.spoonacular.com/food/ingredients/autocomplete`,
-      {
-        params: {
-          query: strippedDescription,
-          number: 1,
-          metaInformation: true,
-        },
-        headers: { "x-api-key": process.env.SPOONACULAR_API_KEY },
-      }
-    );
+    const updatedName = name || item.name;
+    let updatedCategory = category;
 
-    let aisle = "";
-    if (response.data.length > 0) {
-      aisle = response.data[0].aisle;
+    if (!updatedCategory) {
+      let strippedDescription = updatedName.replace(/[^a-zA-Z ]+/g, "");
+      strippedDescription = strippedDescription.toLowerCase();
+      customExclusions.forEach((excl) => {
+        const regex = new RegExp(`^${excl} `, "g");
+        strippedDescription = strippedDescription.replace(regex, "");
+      });
+
+      const response = await axios.get(
+        `https://api.spoonacular.com/food/ingredients/autocomplete`,
+        {
+          params: { query: strippedDescription, number: 1, metaInformation: true },
+          headers: { "x-api-key": process.env.SPOONACULAR_API_KEY },
+        }
+      );
+
+      updatedCategory = response.data.length > 0 ? response.data[0].aisle : item.category;
     }
 
-    await ShoppingListItem.update(
-      { name, category: aisle },
-      { where: { id: req.params.id } }
-    );
-
-    const updatedItem = await ShoppingListItem.findByPk(req.params.id);
-    res.json(updatedItem);
+    await item.update({ name: updatedName, category: updatedCategory });
+    res.json(item);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to update item" });
@@ -181,7 +191,9 @@ router.put("/api/items/:id", async (req, res) => {
 
 router.get("/api/purchased-items", async (req, res) => {
   try {
-    const purchasedItems = await PurchasedItem.findAll();
+    const user = await User.findOne({ where: { email: req.userEmail } });
+    if (!user) return res.json([]);
+    const purchasedItems = await PurchasedItem.findAll({ where: { UserId: user.id } });
     res.json(purchasedItems);
   } catch (error) {
     console.error(error);
@@ -190,10 +202,14 @@ router.get("/api/purchased-items", async (req, res) => {
 });
 
 router.get("/api/recommendations", async (req, res) => {
-  const twoWeeksAgo = new Date();
-  twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+  const period = parseInt(req.query.period) || 14;
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - period);
 
   try {
+    const user = await User.findOne({ where: { email: req.userEmail } });
+    if (!user) return res.json([]);
+
     const recommendations = await PurchasedItem.findAll({
       attributes: [
         "name",
@@ -201,9 +217,8 @@ router.get("/api/recommendations", async (req, res) => {
         [sequelize.fn("COUNT", sequelize.col("name")), "count"],
       ],
       where: {
-        purchasedAt: {
-          [Op.gte]: twoWeeksAgo,
-        },
+        purchasedAt: { [Op.gte]: cutoff },
+        UserId: user.id,
       },
       group: ["name", "category"],
       having: sequelize.literal("COUNT(name) > 2"),

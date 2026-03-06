@@ -2,23 +2,22 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
-const ItemRow = ({ item, onCheck, onDelete, onEdit }) => {
+const ItemRow = ({ item, onCheck, onDelete, onEdit, onEditCategory }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(item.name);
-
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
+  const [isEditingCategory, setIsEditingCategory] = useState(false);
+  const [editedCategory, setEditedCategory] = useState(item.category);
 
   const handleSave = () => {
     onEdit(item.id, editedName);
     setIsEditing(false);
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSave();
+  const handleSaveCategory = () => {
+    if (editedCategory !== item.category) {
+      onEditCategory(item.id, editedCategory);
     }
+    setIsEditingCategory(false);
   };
 
   return (
@@ -29,12 +28,29 @@ const ItemRow = ({ item, onCheck, onDelete, onEdit }) => {
           value={editedName}
           onChange={(e) => setEditedName(e.target.value)}
           onBlur={handleSave}
-          onKeyPress={handleKeyPress}
+          onKeyPress={(e) => e.key === "Enter" && handleSave()}
           autoFocus
         />
       ) : (
         <>
-          <div onClick={handleEdit}>{item.name}</div>
+          <div className="item-info">
+            <div onClick={() => setIsEditing(true)}>{item.name}</div>
+            {isEditingCategory ? (
+              <input
+                type="text"
+                className="category-edit"
+                value={editedCategory}
+                onChange={(e) => setEditedCategory(e.target.value)}
+                onBlur={handleSaveCategory}
+                onKeyPress={(e) => e.key === "Enter" && handleSaveCategory()}
+                autoFocus
+              />
+            ) : (
+              <span className="item-category" onClick={() => setIsEditingCategory(true)}>
+                {item.category || "Uncategorized"}
+              </span>
+            )}
+          </div>
           <div className="item-buttons">
             <button className="check-button" onClick={() => onCheck(item.id)}>
               <FontAwesomeIcon icon={faCheck} />

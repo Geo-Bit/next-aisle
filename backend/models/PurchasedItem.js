@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
+const User = require("./User");
 
 const PurchasedItem = sequelize.define("PurchasedItem", {
   name: {
@@ -15,5 +16,8 @@ const PurchasedItem = sequelize.define("PurchasedItem", {
     defaultValue: DataTypes.NOW,
   },
 });
+
+PurchasedItem.belongsTo(User, { foreignKey: { allowNull: true } });
+User.hasMany(PurchasedItem, { foreignKey: { allowNull: true } });
 
 module.exports = PurchasedItem;

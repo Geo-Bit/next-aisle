@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import SettingsModal from "./components/SettingsModal";
 import ItemRow from "./components/ItemRow";
+import DarkModeToggle from "./components/DarkModeToggle";
 import "./styles.css";
 
 function App() {
@@ -19,11 +20,20 @@ function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [recommendationPeriod, setRecommendationPeriod] = useState(14); // Default to two weeks
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem("darkMode");
+    return saved !== null ? JSON.parse(saved) : true;
+  });
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
 
   useEffect(() => {
     fetchShoppingLists();
   }, []);
+
+  useEffect(() => {
+    document.body.classList.toggle("light-mode", !darkMode);
+    localStorage.setItem("darkMode", JSON.stringify(darkMode));
+  }, [darkMode]);
 
   useEffect(() => {
     if (selectedList) {
@@ -121,13 +131,33 @@ function App() {
 
   const handleEditItem = async (id, name) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/items/${id}`, {
-        name,
-      });
+      const response = await axios.put(`${API_BASE_URL}/items/${id}`, { name });
       console.log("Item updated:", response.data);
-      fetchItems(); // Refresh the item list
+      fetchItems();
     } catch (error) {
       console.error("Error updating item:", error);
+    }
+  };
+
+  const handleEditCategory = async (id, category) => {
+    try {
+      await axios.put(`${API_BASE_URL}/items/${id}`, { category });
+      fetchItems();
+    } catch (error) {
+      console.error("Error updating category:", error);
+    }
+  };
+
+  const handleDeleteList = async (listId) => {
+    try {
+      await axios.delete(`${API_BASE_URL}/shopping-lists/${listId}`);
+      const updatedLists = shoppingLists.filter((l) => l.id !== listId);
+      setShoppingLists(updatedLists);
+      if (selectedList === listId) {
+        setSelectedList(updatedLists.length > 0 ? updatedLists[0].id : null);
+      }
+    } catch (error) {
+      console.error("Error deleting shopping list:", error);
     }
   };
 
@@ -194,6 +224,7 @@ function App() {
       <button className="settings-button" onClick={handleSettingsToggle}>
         <FontAwesomeIcon icon={faCog} />
       </button>
+      <DarkModeToggle darkMode={darkMode} onToggle={() => setDarkMode(!darkMode)} />
       <SettingsModal
         showSettings={showSettings}
         userEmail={userEmail}
@@ -249,10 +280,19 @@ function App() {
         {shoppingLists.map((list) => (
           <button
             key={list.id}
-            className={selectedList === list.id ? "selected" : ""}
+            className={`list-tab ${selectedList === list.id ? "selected" : ""}`}
             onClick={() => setSelectedList(list.id)}
           >
             {list.name}
+            <span
+              className="delete-list-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteList(list.id);
+              }}
+            >
+              ×
+            </span>
           </button>
         ))}
       </div>
@@ -267,6 +307,7 @@ function App() {
                 onCheck={handleCheckItem}
                 onDelete={handleDeleteItem}
                 onEdit={handleEditItem}
+                onEditCategory={handleEditCategory}
               />
             ))}
           </div>
